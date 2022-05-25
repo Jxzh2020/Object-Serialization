@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <exception>
+#include "Typefigure.h"
 
 class Buffer{
     public:
@@ -28,7 +29,7 @@ class Buffer{
 
 template<typename T>
 int32_t writebin(Type k, const T& data){
-    k
+    return 0;
 }
 
 #endif

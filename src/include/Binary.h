@@ -11,6 +11,7 @@
 #include <type_traits>
 #include "Buffer.h"
 #include "Typefigure.h"
+#include "Seel.h"
 
 namespace binary{
     const char se_open_er[] = "Serialization Open File Failed"; 
@@ -47,24 +48,26 @@ namespace binary{
 
     template <class T>
     bool serialize(const T& src_, const std::string& file){
-        Buffer buf(file);
+        Buffer buf(file,Buffer::out);
         char tmp;
         unsigned int size;
         std::ofstream ofs;
         T src = src_;
-
+        Seel<T> data(src_);
+        std::cout << data.return_type << "and " << data.atom_size << std::endl;
+        return 0;
         ofs.open(file,std::ios::out);
         if(!ofs)
             throw se_open_er;
-        if(!is_valid_type<decltype(v)>){
+        if(!is_valid_type<decltype(src_)>){
             std::cout << "Error type!" << std::endl;
             return false;
         }
         
 
         // atomic types
-        if(is_valid_type<decltype(v)> && is_valid_type<decltype(v)> < STRING){
-            buf.write(src_);
+        if(is_valid_type<decltype(src_)> && is_valid_type<decltype(src_)> < STRING){
+            //buf.writebin(src_);
             std::cout << "is arithmetic" << std::endl;
             //ofs.write("Content_",8);
             // if is arithmetic
@@ -94,7 +97,8 @@ namespace binary{
             //ofs.write("_ends",5);
             ofs.close();
         }
-        else if(is_container<T>::is){
+        /*
+        else if(is_container<T>::id){
             // write type
             tmp = is_container<T>::id ;
             ofs.write(&tmp,sizeof(char));
@@ -108,6 +112,7 @@ namespace binary{
         }
         else    // not supported type
             return false;
+            */
         return true;
     }
 
@@ -116,6 +121,7 @@ namespace binary{
         char tmp;
         unsigned int size;
         std::ifstream ifs;
+        char* k;
         ifs.open(file,std::ios::in);
         if(!ifs)
             throw de_open_er;
@@ -128,13 +134,14 @@ namespace binary{
                 break;
             case 1:
                 ifs.read((char*)&size,sizeof(unsigned int));
-                char* k = new char[size];
+                k = new char[size];
                 ifs.read(k,size);
                 des = k;
                 delete[] k;
                 ifs.close();
                 break;
             case 3:
+                ;
                 break;
         }
 
