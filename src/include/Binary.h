@@ -1,3 +1,5 @@
+#ifndef BINARY_H
+#define BINARY_H
 #include <utility>
 #include <string>
 #include <vector>
@@ -7,18 +9,19 @@
 #include <fstream>
 #include <iostream>
 #include <type_traits>
-#include "src/include/Buffer.h"
+#include "Buffer.h"
+#include "Typefigure.h"
 
 namespace binary{
     const char se_open_er[] = "Serialization Open File Failed"; 
     const char de_open_er[] = "Deserialization Open File Failed";
     /**
      * @brief std::is_arithmetic contains:
-     *          bool:        true
-     *          int:         true
-     *          int const:   true
-     *          float:       true
-     *          float const: true
+     *          bool:        true   0
+     *          int:         true   1
+     *          int const:   true   2
+     *          float:       true   3
+     *          float const: true   
      *          char:        true
      *          char const:  true
      *        std::string
@@ -44,7 +47,7 @@ namespace binary{
 
     template <class T>
     bool serialize(const T& src_, const std::string& file){
-        
+        Buffer buf(file);
         char tmp;
         unsigned int size;
         std::ofstream ofs;
@@ -53,7 +56,15 @@ namespace binary{
         ofs.open(file,std::ios::out);
         if(!ofs)
             throw se_open_er;
-        if(std::is_arithmetic<T>::value){
+        if(!is_valid_type<decltype(v)>){
+            std::cout << "Error type!" << std::endl;
+            return false;
+        }
+        
+
+        // atomic types
+        if(is_valid_type<decltype(v)> && is_valid_type<decltype(v)> < STRING){
+            buf.write(src_);
             std::cout << "is arithmetic" << std::endl;
             //ofs.write("Content_",8);
             // if is arithmetic
@@ -67,7 +78,9 @@ namespace binary{
             //ofs.write("_ends",5);
             ofs.close();
         }
-        else if(std::is_same<T,std::string>::value){
+
+        //  complex types
+        else{
             std::cout << "is string" << std::endl;
             //ofs.write("Content_",8);
             // is string
@@ -81,20 +94,17 @@ namespace binary{
             //ofs.write("_ends",5);
             ofs.close();
         }
-        else if(std::is_same<T,std::pair>::value){
+        else if(is_container<T>::is){
+            // write type
+            tmp = is_container<T>::id ;
+            ofs.write(&tmp,sizeof(char));
+            // write number of contents
             ;
-        }
-        else if(std::is_same<T,std::vector>::value){
+            // write number of one content's consisters
             ;
-        }
-        else if(std::is_same<T,std::list>::value){
+            // write atomic elements
             ;
-        }
-        else if(std::is_same<T,std::set>::value){
-            ;
-        }
-        else if(std::is_same<T,std::map>::value){
-            ;
+            //size = T.size()*SIZE[is_container];
         }
         else    // not supported type
             return false;
@@ -131,3 +141,5 @@ namespace binary{
         return true;
     }
 }
+
+#endif
