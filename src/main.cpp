@@ -6,8 +6,8 @@ int main(){
     std::string k;
     std::cin >> k;
     std::string j;
-    serialize(k,"se.bin");
-    deserialize(j,"se.bin");
+    binary::serialize(k,"se.bin");
+    binary::deserialize(j,"se.bin");
 
     std::cout << (k == j) << std::endl;
     return 0;
