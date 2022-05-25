@@ -50,8 +50,8 @@ bool serialize(const T& src_, const std::string& file){
     if(!ofs)
         throw se_open_er;
     if(std::is_arithmetic<T>::value){
-        
-        ofs.write("Content_",8);
+        std::cout << "is arithmetic" << std::endl;
+        //ofs.write("Content_",8);
         // if is arithmetic
         tmp = 0;
         ofs.write(&tmp,sizeof(char));
@@ -59,21 +59,22 @@ bool serialize(const T& src_, const std::string& file){
         tmp = sizeof(T);
         ofs.write(&tmp,sizeof(char));
         // content
-        ofs.write(&src,sizeof(T));
-        ofs.write("_ends",5);
+        ofs.write((char*)&src,sizeof(T));
+        //ofs.write("_ends",5);
         ofs.close();
     }
     else if(std::is_same<T,std::string>::value){
-        ofs.write("Content_",8);
+        std::cout << "is string" << std::endl;
+        //ofs.write("Content_",8);
         // is string
         tmp = 1;
         ofs.write(&tmp,sizeof(char));
         size = src.length()+1;
         // length
-        ofs.write(&size,sizeof(unsigned int));
+        ofs.write((char*)&size,sizeof(unsigned int));
         //content
         ofs.write(src.c_str(),size);
-        ofs.write("_ends",5);
+        //ofs.write("_ends",5);
         ofs.close();
     }
     else{
@@ -107,5 +108,28 @@ bool serialize(const T& src_, const std::string& file){
 
 template <class T>
 bool deserialize(T& des, const std::string& file){
+    char tmp;
+    unsigned int size;
+    std::ifstream ifs;
+    ifs.open(file,std::ios::in);
+    if(!ifs)
+        throw de_open_er;
+    ifs.read(&tmp,sizeof(char));
+    switch(tmp){
+        case 0: // is arithmetic
+            ifs.read(&tmp,sizeof(char));
+            ifs.read((char*)&des,tmp);
+            ifs.close();
+            break;
+        case 1:
+            ifs.read((char*)&size,sizeof(unsigned int));
+            char* k = new char[size];
+            ifs.read(k,size);
+            des = k;
+            delete[] k;
+            ifs.close();
+            break;
+    }
+
     return true;
 }
