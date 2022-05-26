@@ -11,7 +11,7 @@ struct Seel{
     Seel(const T& data);
     ~Seel(){ if(data_) delete[] data_;}
     template <typename T>
-    bool wb(T& des){ memcpy((char*)&des,data_,meta_num*atom_size); return true; }
+    bool writeback(T& des){ memcpy((char*)&des,data_,meta_num*atom_size); return true; }
     Type return_type;   // the class type it should return when deserialized
     int32_t meta_num;      // the total number of elements
     size_t atom_size;      // the size of atomic elements
@@ -29,8 +29,9 @@ Seel::Seel(const std::string& data): return_type(STRING), meta_num(data.length()
     memcpy(data_,data.c_str(),atom_size*meta_num);
 }
 
+// write back string
 template <>
-bool Seel::wb(std::string& des){
+bool Seel::writeback(std::string& des){
     des = data_;
     return true; 
 }

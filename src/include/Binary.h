@@ -53,19 +53,6 @@ namespace binary{
         std::cout << data.return_type << "and " << data.atom_size << std::endl;
         //return 0;
         buf.writebin(data);
-        int mm = 32;
-        char p = 'p';
-        float ll = 1;
-        bool bl = true;
-        /*
-        std::vector<int> jk(1);
-        jk[0] = 99;
-        buf.writebin(Seel(mm));
-        buf.writebin(Seel(p));
-        buf.writebin(Seel(ll));
-        buf.writebin(Seel(bl));
-        buf.writebin(Seel(jk));
-        */
         
         return true;
     }
@@ -75,7 +62,7 @@ namespace binary{
         Buffer buf(file,Buffer::in);
         Seel des_(des);
         buf.readbin(des_);
-        des_.wb(des);
+        des_.writeback(des);
         return true;
     }
 }
