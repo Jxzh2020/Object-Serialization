@@ -5,6 +5,7 @@
 #include <string>
 #include <exception>
 #include "Typefigure.h"
+#include "Seel.h"
 
 class Buffer{
     public:
@@ -19,17 +20,26 @@ class Buffer{
             }
                 
         }
-        template<typename T>
-        int32_t writebin(Type , const T&);
+        ~Buffer(){
+            fs.close();
+        }
+
+        template<typename T,typename... type>
+        int32_t writebin(const Seel<T>&);
+
         static const bool in = true;
         static const bool out = false;
     private:
         std::fstream fs;
 };
 
-template<typename T>
-int32_t writebin(Type k, const T& data){
-    return 0;
+template<typename T,typename... type>
+int32_t Buffer::writebin(const Seel<T>& parsel){
+    char tmp = (int)parsel.return_type;
+    fs.write(&tmp,sizeof(char));
+    fs.write((char*)&parsel.meta_num,sizeof(int32_t)+sizeof(size_t));
+    fs.write(parsel.data_,parsel.meta_num*parsel.atom_size);
+    return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+sizeof(T);
 }
 
 #endif

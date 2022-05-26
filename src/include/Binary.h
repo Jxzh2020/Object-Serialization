@@ -55,16 +55,10 @@ namespace binary{
         T src = src_;
         Seel<T> data(src_);
         std::cout << data.return_type << "and " << data.atom_size << std::endl;
-        return 0;
-        ofs.open(file,std::ios::out);
-        if(!ofs)
-            throw se_open_er;
-        if(!is_valid_type<decltype(src_)>){
-            std::cout << "Error type!" << std::endl;
-            return false;
-        }
+        //return 0;
+        buf.writebin(data);
         
-
+        return 0;
         // atomic types
         if(is_valid_type<decltype(src_)> && is_valid_type<decltype(src_)> < STRING){
             //buf.writebin(src_);
