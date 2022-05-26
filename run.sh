@@ -1,2 +1,1 @@
-make
-./build/main
+make && ./build/main
