@@ -4,19 +4,33 @@
 #include <typeinfo>
 
 template<typename T>
-void test();
+void testbin();
 
+void test_pair();
 int main(){
-    test<bool>();
-    test<char>();
-    test<int>();
-    test<float>();
-    test<std::string>();
+    /*
+    testbin<bool>();
+    testbin<char>();
+    testbin<int>();
+    testbin<float>();
+    */
+    testbin<std::string>();
+    getchar();
+    getchar();
+    test_pair();
+    /*  different type deserialized from file
+    bool k;
+    char j;
+    std::cin >> k;
+    binary::serialize(k,"se.bin");
+    binary::deserialize(j,"se.bin");
+    std::cout << typeid(k).name() << ": "<< (bool)(k == j) << std::endl;
+    */
     return 0;
 }
 
 template<typename T>
-void test(){
+void testbin(){
     T k,j;
     std::cout << "input source data of " << typeid(k).name() << ": " << std::endl;
     
@@ -25,4 +39,10 @@ void test(){
     binary::deserialize(j,"se.bin");
 
     std::cout << typeid(k).name() << ": "<< (bool)(k == j) << std::endl;
+}
+
+
+void test_pair(){
+    std::pair<int, bool> k(5,0);
+    binary::serialize(k,"se.bin");
 }

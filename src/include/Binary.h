@@ -40,18 +40,19 @@ namespace binary{
     bool serialize(const T&, const std::string&);
     template <class T>
     bool deserialize(T&, const std::string&);
-    /*
+    template <class T>
     unsigned int serialize_xml(T&, const std::string& ,const std::string&);
+    template <class T>
     unsigned int deserialize_xml(T&, const std::string& ,const std::string&);
-    */
+    
 
 
     template <class T>
     bool serialize(const T& src_, const std::string& file){
         Buffer buf(file,Buffer::out);
         Seel data(src_);
-        std::cout << data.return_type << "and " << data.atom_size << std::endl;
-        //return 0;
+        //std::cout << data.return_type << "and " << data.atom_size << std::endl;
+        
         buf.writebin(data);
         
         return true;
@@ -61,9 +62,23 @@ namespace binary{
     bool deserialize(T& des, const std::string& file){
         Buffer buf(file,Buffer::in);
         Seel des_(des);
+
         buf.readbin(des_);
+
         des_.writeback(des);
         return true;
+    }
+
+    // TODO xml
+    template <class T>
+    unsigned int serialize_xml(T&, const std::string& ,const std::string&){
+        return 0;
+    }
+
+    // TODO xml
+    template <class T>
+    unsigned int deserialize_xml(T&, const std::string& ,const std::string&){
+        return 0;
     }
 }
 
