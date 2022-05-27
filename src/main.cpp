@@ -44,6 +44,9 @@ void testbin(){
 
 
 void test_pair(){
-    std::pair<int, bool> k(5,0);
+    std::pair<int, bool> k(5,0),j;
     binary::serialize(k,"se.bin");
+    binary::deserialize(j,"se.bin");
+    std::cout << typeid(k).name() << ": "<< (bool)(k == j) << std::endl;
+
 }

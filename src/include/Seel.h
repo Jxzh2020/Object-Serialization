@@ -170,7 +170,20 @@ bool Seel::writeback(std::string& des){
 
 template <typename T,typename K>
 bool Seel::writeback(std::pair<T,K>& des){
-    Seel first();
+    T first_;
+    K second_;
+    size_t step = 0;
+    Seel first(first_);
+    Seel second(second_);
+    step+=(first.deserialize_frombytes(data_));
+    second.deserialize_frombytes(data_+step);
+    
+    first.writeback(first_);
+    second.writeback(second_);
+
+    des.first = first_;
+    des.second = second_;
+    return true;
 }
 
 template <typename T>
