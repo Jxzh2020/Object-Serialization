@@ -36,6 +36,7 @@ class Buffer{
         static const bool out = false;
     private:
         std::fstream fs;
+        //char *buf;
 };
 
 
@@ -83,21 +84,49 @@ size_t Buffer::getbytes(const Seel& parsel){
 }
 */
 int32_t Buffer::readbin(Seel& parsel){
+    /*
     char tmp;
     int32_t meta_num;
     size_t atom_size;
+    size_t total;
     fs.read(&tmp,sizeof(char));
 
     if(parsel.return_type != (int)tmp)
         throw "bad type";
 
     fs.read((char *)&meta_num,sizeof(int32_t)+sizeof(size_t));
-    parsel.data_ = new char[meta_num*atom_size];
+    if(parsel.return_type==STRING)
+        total = meta_num*atom_size;
+        
+    else
+        total = atom_size;
+    parsel.data_ = new char[total];
     parsel.meta_num = meta_num;
     parsel.atom_size = atom_size;
     std::cout << meta_num << " and " << atom_size << std::endl;
-    fs.read(parsel.data_,parsel.meta_num*parsel.atom_size);
-    return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+parsel.meta_num*parsel.atom_size;
+    fs.read(parsel.data_,total);
+    return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+total;
+}   */
+    char tmp;
+    int32_t meta_num;
+    size_t atom_size;
+    size_t total = 0;
+    char* buf;
+    fs.read(&tmp,sizeof(char));
+    fs.read((char *)&meta_num,sizeof(int32_t));
+    fs.read((char*)&atom_size,sizeof(size_t));
+    if(parsel.return_type==STRING)
+        total = meta_num*atom_size+sizeof(char)+sizeof(int32_t)+sizeof(size_t);
+        
+    else
+        total = atom_size+sizeof(char)+sizeof(int32_t)+sizeof(size_t);
+    std::cout << "before " << total <<" " << meta_num << " "<< atom_size << std::endl;
+    buf = new char[(int)total];
+    std::cout << "after" << std::endl;
+    fs.seekg(0,std::ios::beg);
+    fs.read(buf,total);
+    parsel.deserialize_frombytes(buf);
+    return total;
 }
 
 #endif

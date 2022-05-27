@@ -28,8 +28,25 @@ struct Seel{
 
     ~Seel(){ if(data_) delete[] data_;}
 
-    template <typename T,typename... types>
+    template <typename T>
     bool writeback(T& des){ memcpy((char*)&des,data_,meta_num*atom_size); return true; }
+
+    template <typename T,typename K>
+    bool writeback(std::pair<T,K>&);
+
+    template <typename T>
+    bool writeback(std::vector<T>&);
+    
+    template <typename T>
+    bool writeback(std::list<T>&);
+
+    template <typename T>
+    bool writeback(std::set<T>&);
+
+    template <typename T,typename K>
+    bool writeback(std::map<T,K>&);
+
+    size_t deserialize_frombytes(char* );
 
     private:
         template <typename T>
@@ -62,6 +79,13 @@ Seel::Seel(const std::string& data): return_type(STRING), meta_num(data.length()
 template <typename T,typename K>
 Seel::Seel(const std::pair<T,K>& data): return_type(PAIR), meta_num(2), atom_size(0),data_(nullptr) {
     size_t step;
+    /*
+    Seel first(data.first);
+    Seel second(data.second);
+    
+    atom_size = first.atom_size + second.atom_size;
+
+    */
     if(is_valid_type<T> == OTHER || is_valid_type<K> == OTHER)
         throw "unspported type in std::pair";
     serialize_stl(data.first);
@@ -142,6 +166,63 @@ template <>
 bool Seel::writeback(std::string& des){
     des = data_;
     return true; 
+}
+
+template <typename T,typename K>
+bool Seel::writeback(std::pair<T,K>& des){
+    Seel first();
+}
+
+template <typename T>
+bool Seel::writeback(std::vector<T>&){
+    ;
+}
+
+template <typename T>
+bool Seel::writeback(std::list<T>&){
+    ;
+}
+
+template <typename T>
+bool Seel::writeback(std::set<T>&){
+    ;
+}
+
+template <typename T,typename K>
+bool Seel::writeback(std::map<T,K>&){
+    ;
+}
+
+size_t Seel::deserialize_frombytes(char* buf){
+    char tmp;
+    size_t step = 0;
+    int32_t meta_num;
+    size_t atom_size;
+    size_t total;
+    memcpy(&tmp,buf+step,sizeof(char));
+    step+=sizeof(char);
+    // TODO type check
+    
+    memcpy((char* )&meta_num,buf+step,sizeof(int32_t));
+    step+=sizeof(int32_t);
+
+    memcpy((char* )&atom_size,buf+step,sizeof(size_t));
+    step+=sizeof(size_t);
+    
+
+
+    if(return_type == STRING)
+        total = meta_num*atom_size;
+    else
+        total = atom_size;
+    this->meta_num = meta_num;
+    this->atom_size = atom_size;
+    data_  = new char[total];
+    memcpy(data_,buf+step,total);
+    step+=total;
+    std::cout << "the total bytes are " << step << std::endl;
+    return step;
+
 }
 
 #endif

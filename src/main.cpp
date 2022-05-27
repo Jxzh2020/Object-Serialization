@@ -16,6 +16,7 @@ int main(){
     */
     testbin<std::string>();
     getchar();
+    std::cout << "DEBUG" << std::endl;
     getchar();
     test_pair();
     /*  different type deserialized from file
