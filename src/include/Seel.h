@@ -5,7 +5,23 @@
 #include <cstring>
 #include "Typefigure.h"
 #include "Buffer.h"
+#define CONTAINER_SINGLE    return_type = is_valid_type<T>; meta_num = data.size(); atom_size = 0;data_ = nullptr;  \
+                            CHECK_VALID_ONE;    for( auto &i:data) serialize_stl(i);                                \
 
+
+#define CONTAINER_WB_PUSH_BACK      size_t step = 0; T temp; Seel tmp(temp); des.clear();                           \
+                                    for(int i = 0; i< meta_num; i++){                                               \
+                                        tmp.reset();                                                                \
+                                        step+=(tmp.deserialize_frombytes(data_+step));                              \
+                                        tmp.writeback(temp);                                                        \
+                                        des.push_back(temp);}                                                       \
+                                    return true;                                                                    \
+
+#define CHECK_VALID_TWO             if(is_valid_type<T> == OTHER || is_valid_type<K> == OTHER)                      \
+                                        throw "unspported type in container"                                        \
+
+#define CHECK_VALID_ONE             if(is_valid_type<T> == OTHER)                                                   \
+                                        throw "unspported type in container"                                        \
 
 struct Seel{
     template <typename T>
@@ -15,13 +31,11 @@ struct Seel{
     Seel(const std::pair<T,K>&);
 
     template <typename T>
-    Seel(const std::vector<T>&);
-
+    Seel(const std::vector<T>& data){CONTAINER_SINGLE}
     template <typename T>
-    Seel(const std::list<T>&);
-
+    Seel(const std::list<T>& data){CONTAINER_SINGLE}
     template <typename T>
-    Seel(const std::set<T>&);
+    Seel(const std::set<T>& data){CONTAINER_SINGLE}
 
     template <typename T,typename K>
     Seel(const std::map<T,K>&);
@@ -35,10 +49,10 @@ struct Seel{
     bool writeback(std::pair<T,K>&);
 
     template <typename T>
-    bool writeback(std::vector<T>&);
+    bool writeback(std::vector<T>& des){CONTAINER_WB_PUSH_BACK}
     
     template <typename T>
-    bool writeback(std::list<T>&);
+    bool writeback(std::list<T>& des){CONTAINER_WB_PUSH_BACK}
 
     template <typename T>
     bool writeback(std::set<T>&);
@@ -61,7 +75,7 @@ struct Seel{
     Type return_type;       // the class type it should return when deserialized
     int32_t meta_num;       // the total number of elements
     size_t atom_size;       // the size of atomic elements
-    char* data_;
+    char* data_;            // binary of the object
 };
 
 // default Seel ctor, for atomic types
@@ -82,55 +96,22 @@ Seel::Seel(const std::string& data): return_type(STRING), meta_num(data.length()
 template <typename T,typename K>
 Seel::Seel(const std::pair<T,K>& data): return_type(PAIR), meta_num(2), atom_size(0),data_(nullptr) {
     size_t step;
-    /*
-    Seel first(data.first);
-    Seel second(data.second);
-    
-    atom_size = first.atom_size + second.atom_size;
 
-    */
-    if(is_valid_type<T> == OTHER || is_valid_type<K> == OTHER)
-        throw "unspported type in std::pair";
+    CHECK_VALID_TWO;
     serialize_stl(data.first);
     serialize_stl(data.second);
 }
 
-template <typename T>
-Seel::Seel(const std::vector<T>& data): return_type(VECTOR), meta_num(data.size()), atom_size(0), data_(nullptr){
-    if(is_valid_type<T> == OTHER)
-        throw "unspported type in std::vector";
-    for( auto &i:data)
-    serialize_stl(i);
-}
-
-template <typename T>
-Seel::Seel(const std::list<T>& data): return_type(LIST), meta_num(data.size()), atom_size(0), data_(nullptr){
-    if(is_valid_type<T> == OTHER)
-        throw "unspported type in std::vector";
-    for( auto &i:data)
-    serialize_stl(i);
-}
-
-template <typename T>
-Seel::Seel(const std::set<T>& data): return_type(SET), meta_num(data.size()), atom_size(0), data_(nullptr){
-    if(is_valid_type<T> == OTHER)
-        throw "unspported type in std::vector";
-    for( auto &i:data)
-    serialize_stl(i);
-}
-
 template <typename T,typename K>
 Seel::Seel(const std::map<T,K>& data): return_type(MAP), meta_num(data.size()), atom_size(0), data_(nullptr){
-    if(is_valid_type<T> == OTHER || is_valid_type<K> == OTHER)
-        throw "unspported type in std::vector";
+    CHECK_VALID_TWO;
+
     std::pair<T,K> temp;
     for( auto &i:data){
         temp = std::make_pair(i.first,i.second);
         serialize_stl(temp);
     }
-    
 }
-
 
 template <typename T>
 size_t Seel::serialize_stl(const T& data){
@@ -206,39 +187,6 @@ bool Seel::writeback(std::pair<T,K>& des){
 }
 
 template <typename T>
-bool Seel::writeback(std::vector<T>& des){
-    size_t step = 0;
-    T temp;
-    Seel tmp(temp);
-    des.clear();
-
-    for(int i = 0; i< meta_num; i++){
-        tmp.reset();
-        step+=(tmp.deserialize_frombytes(data_+step));
-        tmp.writeback(temp);
-        des.push_back(temp);
-    }
-    return true;
-
-}
-
-template <typename T>
-bool Seel::writeback(std::list<T>& des){
-    size_t step = 0;
-    T temp;
-    Seel tmp(temp);
-    des.clear();
-
-    for(int i = 0; i< meta_num; i++){
-        tmp.reset();
-        step+=(tmp.deserialize_frombytes(data_+step));
-        tmp.writeback(temp);
-        des.push_back(temp);
-    }
-    return true;
-}
-
-template <typename T>
 bool Seel::writeback(std::set<T>& des){
     size_t step = 0;
     T temp;
@@ -256,7 +204,7 @@ bool Seel::writeback(std::set<T>& des){
 
 template <typename T,typename K>
 bool Seel::writeback(std::map<T,K>& des){
-    std::cout << "**************" << std::endl;
+    //std::cout << "**************" << std::endl;
     std::pair<T,K> temp;
     size_t step = 0;
     Seel tmp(temp);
