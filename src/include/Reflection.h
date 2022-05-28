@@ -23,15 +23,13 @@
 #define _WRAP(T, ...) PUSH_FIELDS_##T(__VA_ARGS__)
 
 
-#define REFLECT(_structname, ...)           ADD_META;                                                               \
-                                            EXPANSION_ALL(__VA_ARGS__)                                              \
-                                            TypeInfo GetInfo(){                                                     \
+#define REFLECT(_structname, ...)           EXPANSION_ALL(__VA_ARGS__)                                              \
+                                            TypeInfo _GetInfo(){                                                    \
                                             TypeInfo temp;                                                          \
                                             temp.members = ArgCount(__VA_ARGS__);                                   \
+                                            temp.name = TOSTRING(_structname);                                      \
                                             PUSH_FIELDS(__VA_ARGS__)                                                \
-                                            return temp;}                                                           \
-                                            _structname(){name = TOSTRING(_structname);                             \
-                                            Init();}
+                                            return temp;}
 
 struct TypeInfo{
     std::string name;
@@ -40,7 +38,12 @@ struct TypeInfo{
     std::vector<Type> member_types;
 };
 struct User{
-    void Init();
+    User(){
+        id = 3200;
+        age = 20;
+        gpa = {"good", "second"};
+    }
+    ~User(){}
     REFLECT(User,
         int, id,
         int, age,
@@ -49,11 +52,16 @@ struct User{
     );
     
 };
-void User::Init() {
-    id = 3200;
-    age = 20;
-    gpa = {"good", "second"};
-}
+template <typename U>
+struct is_user_defined{
+    
+    template <typename T, TypeInfo(T::*)() = &T::_GetInfo>
+    static constexpr bool check(T*) { return true; };   //  (1)
+    static constexpr bool check(...) { return false; }; //  (2)
+ 
+    static constexpr bool ret = check(static_cast<U*>(0));  //  (3)
+};
+
 #endif
 
 
