@@ -13,57 +13,48 @@
                                             std::vector<std::string> member_names;                                  \
                                             std::vector<Type> member_types
 
-#define HMMacroArgCount(...) _HMMacroArgCount(__VA_ARGS__, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-#define _HMMacroArgCount(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, COUNT, ...) COUNT
+#define ArgCount(...) _ArgCount(__VA_ARGS__, 16,16, 15,15, 14,14, 13,13, 12,12, 11,11, 10,10, 9,9, 8,8, 7,7, 6,6, 5,5, 4, 4, 3,3, 2,2, 1, 1)
+#define _ArgCount(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26,_27,_28,_29,_30,_31, COUNT, ...) COUNT
 
 
 
-#define EXPANSION_ALL(...)      EXPAND_DEFINE(__VA_ARGS__)                                              \
-                                                             
+#define EXPANSION_ALL(...)      EXPAND_DEFINE(__VA_ARGS__)
+
+#define _WRAP(T, ...) PUSH_FIELDS_##T(__VA_ARGS__)
 
 
 #define REFLECT(_structname, ...)           ADD_META;                                                               \
                                             EXPANSION_ALL(__VA_ARGS__)                                              \
+                                            TypeInfo GetInfo(){                                                     \
+                                            TypeInfo temp;                                                          \
+                                            temp.members = ArgCount(__VA_ARGS__);                                   \
+                                            PUSH_FIELDS(__VA_ARGS__)                                                \
+                                            return temp;}                                                           \
                                             _structname(){name = TOSTRING(_structname);                             \
-                                            members = HMMacroArgCount(__VA_ARGS__)/2;                               \
-                                            PUSH_FIELDS(__VA_ARGS__);                                               \
                                             Init();}
-struct user{
-    void Init();
-    REFLECT(user,int, id,int, age,float, gpa);
-    
-};
-#endif
-/*
-struct user{
-    void Init();
-    std::string name; 
-    short members; 
-    std::vector<std::string> member_names; 
+
+struct TypeInfo{
+    std::string name;
+    short members;
+    std::vector<std::string> member_names;
     std::vector<Type> member_types;
-    
-    user(){
-        name = TOSTRING(user); 
-        members = HMMacroArgCount(int, id, int, age, float, gpa)/2; 
-        member_types.push_back(is_valid_type<int>); 
-        member_types.push_back(is_valid_type<int>); 
-        member_types.push_back(is_valid_type<float>); 
-        member_types.push_back(is_valid_type<_KEEP>); 
-        member_types.push_back(is_valid_type<_KEEP>); 
-        member_types.push_back(is_valid_type<_KEEP>); 
-        PUSH_FIELDS_7(_KEEP,_KEEP,_KEEP,_KEEP,_KEEP,_KEEP,_KEEP,_KEEP,_KEEP, _KEEP,_KEEP ,_KEEP ,_KEEP , _KEEP, _KEEP, _KEEP, _KEEP, _KEEP,_KEEP, _KEEP,_KEEP,_KEEP,_KEEP,_KEEP)
-        Init();
-    }
-
-
-
-    user(){
-        name = TOSTRING(user); 
-        members = 3; 
-        Init();
-    }
 };
-*/
+struct User{
+    void Init();
+    REFLECT(User,
+        int, id,
+        int, age,
+        std::vector<std::string>, gpa,
+        TypeInfo, userdefined
+    );
+    
+};
+void User::Init() {
+    id = 3200;
+    age = 20;
+    gpa = {"good", "second"};
+}
+#endif
 
 
 

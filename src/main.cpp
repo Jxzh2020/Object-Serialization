@@ -1,7 +1,8 @@
-#include "include/Binary.h"
 #include <string>
 #include <iostream>
 #include <typeinfo>
+#include "include/Binary.h"
+#include "include/Reflection.h"
 
 #define TEST    binary::serialize(k,"se.bin");                                          \
                 binary::deserialize(j,"se.bin");                                        \
@@ -31,6 +32,18 @@ int main(){
     test_list();
     test_set();
     test_map();
+    User me;
+    std::cout << me.age << std::endl;
+    std::cout << me.GetInfo().members << std::endl;
+    for(auto &i:me.GetInfo().member_names){
+        std::cout << i << "_end" << std::endl;
+    }
+    for(auto &i:me.GetInfo().member_types){
+        std::cout << i << "_end" << std::endl;
+    }
+    for(auto &i:me.gpa){
+        std::cout << i << "_end" << std::endl;
+    }
 
     return 0;
 }

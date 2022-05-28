@@ -6,7 +6,9 @@
 #include <set>
 #include <list>
 #include <type_traits>
+
 enum Type{
+    KEEP,
     OTHER,
     BOOL,
     INT,
@@ -30,7 +32,12 @@ struct _is_valid_type
     static const Type id = OTHER;
     
 };
-
+template<>
+struct _is_valid_type<_KEEP>
+{
+    static const Type id = KEEP;
+    //static const int8_t size = 1;
+};
 template<>
 struct _is_valid_type<bool>
 {
