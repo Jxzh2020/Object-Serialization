@@ -20,6 +20,9 @@ enum Type{
     MAP
     
 };
+struct _KEEP{
+    ;
+};
 
 template<typename T, typename... type>
 struct _is_valid_type
@@ -93,6 +96,7 @@ struct _is_valid_type<std::map<T,type...>>
 
 template<typename T,typename... Types>
 constexpr Type is_valid_type = _is_valid_type<T, Types...>::id;
+
 
 
 #endif

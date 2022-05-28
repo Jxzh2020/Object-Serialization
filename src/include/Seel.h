@@ -5,6 +5,7 @@
 #include <cstring>
 #include "Typefigure.h"
 #include "Buffer.h"
+#include "Reflection.h"
 #define CONTAINER_SINGLE    return_type = is_valid_type<T>; meta_num = data.size(); atom_size = 0;data_ = nullptr;  \
                             CHECK_VALID_ONE;    for( auto &i:data) serialize_stl(i);                                \
 
@@ -204,7 +205,7 @@ bool Seel::writeback(std::set<T>& des){
 
 template <typename T,typename K>
 bool Seel::writeback(std::map<T,K>& des){
-    //std::cout << "**************" << std::endl;
+    
     std::pair<T,K> temp;
     size_t step = 0;
     Seel tmp(temp);
