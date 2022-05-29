@@ -8,29 +8,31 @@ T Checks(T& src){return src; }
 
 int Checks() {return 0; }
 */
-#define Checks(...) _Checks(temp,##__VA_ARGS__,temp)
+
+int _GLOBALD = 0;
+#define Checks(...) _Checks(temp,##__VA_ARGS__,_GLOBALD)
 #define _Checks(T,K, ...) K
 #define CHECKS(...) _CHECKS(int,##__VA_ARGS__,int)
 #define _CHECKS(T, K, ...) K
 
 #define EXPAND_DEFINE(...) _EXPAND_DEFINE_0(__VA_ARGS__, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,)
 
-#define _EXPAND_DEFINE_0(COUT0,COUT1, ...)        COUT0 COUT1;        CHECKS(COUT0)  _FUN0() const{int temp = 0;return Checks(COUT1);} _EXPAND_DEFINE_1(__VA_ARGS__)
-#define _EXPAND_DEFINE_1(COUT2,COUT3, ...)        COUT2 COUT3;        CHECKS(COUT2)  _FUN1() const{int temp = 0;return Checks(COUT3);} _EXPAND_DEFINE_2(__VA_ARGS__)
-#define _EXPAND_DEFINE_2(COUT4,COUT5, ...)        COUT4 COUT5;        CHECKS(COUT4)  _FUN2() const{int temp = 0;return Checks(COUT5);} _EXPAND_DEFINE_3(__VA_ARGS__)
-#define _EXPAND_DEFINE_3(COUT6,COUT7, ...)        COUT6 COUT7;        CHECKS(COUT6)  _FUN3() const{int temp = 0;return Checks(COUT7);} _EXPAND_DEFINE_4(__VA_ARGS__)
-#define _EXPAND_DEFINE_4(COUT8,COUT9, ...)        COUT8 COUT9;        CHECKS(COUT8)  _FUN4() const{int temp = 0;return Checks(COUT9);} _EXPAND_DEFINE_5(__VA_ARGS__)
-#define _EXPAND_DEFINE_5(COUT10,COUT11, ...)      COUT10 COUT11;      CHECKS(COUT10)  _FUN5() const{int temp = 0;return Checks(COUT11);} _EXPAND_DEFINE_6(__VA_ARGS__)
-#define _EXPAND_DEFINE_6(COUT12,COUT13, ...)      COUT12 COUT13;      CHECKS(COUT12)  _FUN6() const{int temp = 0;return Checks(COUT13);} _EXPAND_DEFINE_7(__VA_ARGS__)
-#define _EXPAND_DEFINE_7(COUT14,COUT15, ...)      COUT14 COUT15;      CHECKS(COUT14)  _FUN7() const{int temp = 0;return Checks(COUT15);} _EXPAND_DEFINE_8(__VA_ARGS__)
-#define _EXPAND_DEFINE_8(COUT16,COUT17, ...)      COUT16 COUT17;      CHECKS(COUT16)  _FUN8() const{int temp = 0;return Checks(COUT17);} _EXPAND_DEFINE_9(__VA_ARGS__)
-#define _EXPAND_DEFINE_9(COUT18,COUT19, ...)      COUT18 COUT19;      CHECKS(COUT18)  _FUN9() const{int temp = 0;return Checks(COUT19);} _EXPAND_DEFINE_10(__VA_ARGS__)
-#define _EXPAND_DEFINE_10(COUT20,COUT21, ...)     COUT20 COUT21;      CHECKS(COUT20)  _FUN10() const{int temp = 0;return Checks(COUT21);} _EXPAND_DEFINE_11(__VA_ARGS__)
-#define _EXPAND_DEFINE_11(COUT22,COUT23, ...)     COUT22 COUT23;      CHECKS(COUT22)  _FUN11() const{int temp = 0;return Checks(COUT23);} _EXPAND_DEFINE_12(__VA_ARGS__)
-#define _EXPAND_DEFINE_12(COUT24,COUT25, ...)     COUT24 COUT25;      CHECKS(COUT24)  _FUN12() const{int temp = 0;return Checks(COUT25);} _EXPAND_DEFINE_13(__VA_ARGS__)
-#define _EXPAND_DEFINE_13(COUT26,COUT27, ...)     COUT26 COUT27;      CHECKS(COUT26)  _FUN13() const{int temp = 0;return Checks(COUT27);} _EXPAND_DEFINE_14(__VA_ARGS__)
-#define _EXPAND_DEFINE_14(COUT28,COUT29, ...)     COUT28 COUT29;      CHECKS(COUT28)  _FUN14() const{int temp = 0;return Checks(COUT29);} _EXPAND_DEFINE_15(__VA_ARGS__)
-#define _EXPAND_DEFINE_15(COUT30,COUT31, ...)     COUT30 COUT31;      CHECKS(COUT30)  _FUN15() const{int temp = 0;return Checks(COUT31);}
+#define _EXPAND_DEFINE_0(COUT0,COUT1, ...)        COUT0 COUT1;        CHECKS(COUT0)&  _FUN0() {int temp = 0;return Checks(COUT1);} _EXPAND_DEFINE_1(__VA_ARGS__)
+#define _EXPAND_DEFINE_1(COUT2,COUT3, ...)        COUT2 COUT3;        CHECKS(COUT2)&  _FUN1() {int temp = 0;return Checks(COUT3);} _EXPAND_DEFINE_2(__VA_ARGS__)
+#define _EXPAND_DEFINE_2(COUT4,COUT5, ...)        COUT4 COUT5;        CHECKS(COUT4)&  _FUN2() {int temp = 0;return Checks(COUT5);} _EXPAND_DEFINE_3(__VA_ARGS__)
+#define _EXPAND_DEFINE_3(COUT6,COUT7, ...)        COUT6 COUT7;        CHECKS(COUT6)&  _FUN3() {int temp = 0;return Checks(COUT7);} _EXPAND_DEFINE_4(__VA_ARGS__)
+#define _EXPAND_DEFINE_4(COUT8,COUT9, ...)        COUT8 COUT9;        CHECKS(COUT8)&  _FUN4() {int temp = 0;return Checks(COUT9);} _EXPAND_DEFINE_5(__VA_ARGS__)
+#define _EXPAND_DEFINE_5(COUT10,COUT11, ...)      COUT10 COUT11;      CHECKS(COUT10)&  _FUN5() {int temp = 0;return Checks(COUT11);} _EXPAND_DEFINE_6(__VA_ARGS__)
+#define _EXPAND_DEFINE_6(COUT12,COUT13, ...)      COUT12 COUT13;      CHECKS(COUT12)&  _FUN6() {int temp = 0;return Checks(COUT13);} _EXPAND_DEFINE_7(__VA_ARGS__)
+#define _EXPAND_DEFINE_7(COUT14,COUT15, ...)      COUT14 COUT15;      CHECKS(COUT14)&  _FUN7() {int temp = 0;return Checks(COUT15);} _EXPAND_DEFINE_8(__VA_ARGS__)
+#define _EXPAND_DEFINE_8(COUT16,COUT17, ...)      COUT16 COUT17;      CHECKS(COUT16)&  _FUN8() {int temp = 0;return Checks(COUT17);} _EXPAND_DEFINE_9(__VA_ARGS__)
+#define _EXPAND_DEFINE_9(COUT18,COUT19, ...)      COUT18 COUT19;      CHECKS(COUT18)&  _FUN9() {int temp = 0;return Checks(COUT19);} _EXPAND_DEFINE_10(__VA_ARGS__)
+#define _EXPAND_DEFINE_10(COUT20,COUT21, ...)     COUT20 COUT21;      CHECKS(COUT20)&  _FUN10() {int temp = 0;return Checks(COUT21);} _EXPAND_DEFINE_11(__VA_ARGS__)
+#define _EXPAND_DEFINE_11(COUT22,COUT23, ...)     COUT22 COUT23;      CHECKS(COUT22)&  _FUN11() {int temp = 0;return Checks(COUT23);} _EXPAND_DEFINE_12(__VA_ARGS__)
+#define _EXPAND_DEFINE_12(COUT24,COUT25, ...)     COUT24 COUT25;      CHECKS(COUT24)&  _FUN12() {int temp = 0;return Checks(COUT25);} _EXPAND_DEFINE_13(__VA_ARGS__)
+#define _EXPAND_DEFINE_13(COUT26,COUT27, ...)     COUT26 COUT27;      CHECKS(COUT26)&  _FUN13() {int temp = 0;return Checks(COUT27);} _EXPAND_DEFINE_14(__VA_ARGS__)
+#define _EXPAND_DEFINE_14(COUT28,COUT29, ...)     COUT28 COUT29;      CHECKS(COUT28)&  _FUN14() {int temp = 0;return Checks(COUT29);} _EXPAND_DEFINE_15(__VA_ARGS__)
+#define _EXPAND_DEFINE_15(COUT30,COUT31, ...)     COUT30 COUT31;      CHECKS(COUT30)&  _FUN15() {int temp = 0;return Checks(COUT31);}
 
 #define FUN(i) _FUN##i()
 

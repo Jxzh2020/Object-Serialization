@@ -93,10 +93,12 @@ struct Seel{
 
 // default Seel ctor, for user_defined types
 template <typename T>
-Seel::Seel(const T& data): return_type(is_valid_type<T>), meta_num(0), atom_size(0),data_(nullptr){
+Seel::Seel(const T& data_): return_type(is_valid_type<T>), meta_num(0), atom_size(0),data_(nullptr){
     // TODO _GETINFO()
-    TypeInfo info = data._GETINFO();
+    TypeInfo info = data_._GETINFO();
     meta_num = info.members;
+    // TODO a copy that can be avoided
+    T data = data_;
 
     // TODO loop unrolling
     /*
