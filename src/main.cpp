@@ -22,12 +22,12 @@ struct Demo;
 void test_usrdefined();
 
 int main(){
-    /*
+    
     testbin<bool>();
     testbin<char>();
     testbin<int>();
     testbin<float>();
-    */
+    
     //std::cout << is_user_defined<bool>::ret << is_user_defined<int>::ret<<"_end" << std::endl;
     testbin<std::string>();
     getchar();

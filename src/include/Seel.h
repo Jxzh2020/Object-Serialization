@@ -55,7 +55,8 @@ struct Seel{
     ~Seel(){ if(data_) delete[] data_;}
 
     template <typename T>
-    bool writeback(T& des){ memcpy((char*)&des,data_,meta_num*atom_size); return true; }
+    bool writeback(T& des);
+
 
     template <typename T,typename K>
     bool writeback(std::pair<T,K>&);
@@ -255,6 +256,25 @@ size_t Seel::getbytes() const{
     else
         return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+atom_size;
 }
+
+template <typename T>
+bool Seel::writeback(T& des){
+    ;
+}
+
+template <>
+bool Seel::writeback(bool& des){ memcpy((char*)&des,data_,meta_num*atom_size); return true; }
+
+template <>
+bool Seel::writeback(char& des){ memcpy((char*)&des,data_,meta_num*atom_size); return true; }
+
+template <>
+bool Seel::writeback(int& des){ memcpy((char*)&des,data_,meta_num*atom_size); return true; }
+
+template <>
+bool Seel::writeback(float& des){ memcpy((char*)&des,data_,meta_num*atom_size); return true; }
+
+
 
 
 // write back string
