@@ -12,6 +12,7 @@
 #include "Buffer.h"
 #include "Typefigure.h"
 #include "Seel.h"
+#include "Reflection.h"
 
 namespace binary{
     const char se_open_er[] = "Serialization Open File Failed"; 
@@ -25,7 +26,7 @@ namespace binary{
      *          float const: true   
      *          char:        true
      *          char const:  true
-     *        std::string
+     *          std::string
      * 
      *        STL containers :
      *          std::pair
@@ -49,17 +50,36 @@ namespace binary{
 
     template <class T>
     bool serialize(const T& src_, const std::string& file){
+        if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::ret)
+            throw "Not valid type! at serialize()";
+
         Buffer buf(file,Buffer::out);
+
         Seel data(src_);
-        //std::cout << data.return_type << "and " << data.atom_size << std::endl;
-        
         buf.writebin(data);
+
         
         return true;
     }
 
+/*
+    template <typename T>
+    bool serialize(const Packer<T>& src_, const std::string& file){
+        if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::ret)
+            throw "Not valid type!";
+
+        Buffer buf(file,Buffer::out);
+
+        Seel data(src_);
+
+        return true;
+    }
+*/
+
     template <class T>
     bool deserialize(T& des, const std::string& file){
+        if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::ret)
+            throw "Not valid type!";
         Buffer buf(file,Buffer::in);
         Seel des_(des);
 

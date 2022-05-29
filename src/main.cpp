@@ -3,6 +3,7 @@
 #include <typeinfo>
 #include "include/Binary.h"
 #include "include/Reflection.h"
+#include "include/Seel.h"
 
 #define TEST    binary::serialize(k,"se.bin");                                          \
                 binary::deserialize(j,"se.bin");                                        \
@@ -27,6 +28,7 @@ int main(){
     testbin<int>();
     testbin<float>();
     */
+    //std::cout << is_user_defined<bool>::ret << is_user_defined<int>::ret<<"_end" << std::endl;
     testbin<std::string>();
     getchar();
     std::cout << "DEBUG" << std::endl;
@@ -36,19 +38,29 @@ int main(){
     test_list();
     test_set();
     test_map();
-    test_usrdefined();
+    //test_usrdefined();
     User me;
     std::cout << me.age << std::endl;
-    std::cout << me._GetInfo().members << std::endl;
-    for(auto &i:me._GetInfo().member_names){
+    std::cout << me._GETINFO().members << std::endl;
+    for(auto &i:me._GETINFO().member_names){
         std::cout << i << "_end" << std::endl;
     }
-    for(auto &i:me._GetInfo().member_types){
+    for(auto &i:me._GETINFO().member_types){
         std::cout << i << "_end" << std::endl;
     }
     for(auto &i:me.gpa){
         std::cout << i << "_end" << std::endl;
     }
+
+    std::cout << "Fine, testing usrdefined type! " << std::endl;
+    try{
+        Seel temp(me);
+        binary::serialize(me,"se.bin");
+    }catch(const char* tmp){
+        std::string temp = tmp;
+        std::cout <<is_user_defined<User>::ret <<"*********ERROR*********** ::" << temp << std::endl;
+    }
+    
 
     return 0;
 }
@@ -123,6 +135,10 @@ struct Demo{
 void test_usrdefined(){
     Demo src,des;
     src.Init_r();
+    std::cout << "_FUN0() == " << src._FUN0() << std::endl;
+    std::cout << "_FUN1() == " << src._FUN1() << std::endl;
+    std::cout << "_FUN2() == " << src._FUN2() << std::endl;
+    std::cout << "_FUN15() == " << src._FUN15() << std::endl;
     binary::serialize(src,"se.bin");
     binary::deserialize(des,"se.bin");
     std::cout << TOSTRING(Demo) << (src == des) << std::endl; 

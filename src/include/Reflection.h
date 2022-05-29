@@ -2,6 +2,7 @@
 #define USER_DEFINED_H
 #include <string>
 #include <vector>
+#include "Seel.h"
 #include "Typefigure.h"
 #include "MACRO_EX.h"
 #define TOSTRING(type) #type
@@ -24,8 +25,9 @@
 
 
 #define REFLECT(_structname, ...)           EXPANSION_ALL(__VA_ARGS__)                                              \
-                                            TypeInfo _GetInfo(){                                                    \
+                                            TypeInfo _GETINFO()const{                                               \
                                             TypeInfo temp;                                                          \
+                                            unsigned int offset = 0;                                                \
                                             temp.members = ArgCount(__VA_ARGS__);                                   \
                                             temp.name = TOSTRING(_structname);                                      \
                                             PUSH_FIELDS(__VA_ARGS__)                                                \
@@ -36,7 +38,9 @@ struct TypeInfo{
     short members;
     std::vector<std::string> member_names;
     std::vector<Type> member_types;
+    std::vector<unsigned int> offset;
 };
+
 struct User{
     User(){
         id = 3200;
@@ -47,22 +51,18 @@ struct User{
     REFLECT(User,
         int, id,
         int, age,
-        std::vector<std::string>, gpa,
-        TypeInfo, userdefined
-    );
-    
+        std::vector<std::string>, gpa);
 };
 template <typename U>
 struct is_user_defined{
     
-    template <typename T, TypeInfo(T::*)() = &T::_GetInfo>
+    template <typename T, TypeInfo(T::*)() const = &T::_GETINFO>
     static constexpr bool check(T*) { return true; };   //  (1)
     static constexpr bool check(...) { return false; }; //  (2)
  
     static constexpr bool ret = check(static_cast<U*>(0));  //  (3)
 };
 
+
+
 #endif
-
-
-

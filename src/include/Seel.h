@@ -6,8 +6,11 @@
 #include "Typefigure.h"
 #include "Buffer.h"
 #include "Reflection.h"
-#define CONTAINER_SINGLE    return_type = is_valid_type<T>; meta_num = data.size(); atom_size = 0;data_ = nullptr;  \
-                            CHECK_VALID_ONE;    for( auto &i:data) serialize_stl(i);                                \
+#define CONTAINER_SINGLE    meta_num = data.size(); atom_size = 0;data_ = nullptr;                                  \
+                            CHECK_VALID_ONE;    for( auto &i:data) serialize_stl(i);
+                        
+#define ATMOIC_CTOR         data_ = new char[atom_size*meta_num];                                                   \
+                            memcpy(data_,&data,atom_size);
 
 
 #define CONTAINER_WB_PUSH_BACK      size_t step = 0; T temp; Seel tmp(temp); des.clear();                           \
@@ -16,13 +19,14 @@
                                         step+=(tmp.deserialize_frombytes(data_+step));                              \
                                         tmp.writeback(temp);                                                        \
                                         des.push_back(temp);}                                                       \
-                                    return true;                                                                    \
+                                    return true;
 
-#define CHECK_VALID_TWO             if(is_valid_type<T> == OTHER || is_valid_type<K> == OTHER)                      \
-                                        throw "unspported type in container"                                        \
+#define CHECK_VALID_TWO             if((is_valid_type<T> == OTHER && !is_user_defined<T>::ret) ||                   \
+                                       (is_valid_type<K> == OTHER && !is_user_defined<K>::ret))                     \
+                                        throw "unspported type in container"
 
-#define CHECK_VALID_ONE             if(is_valid_type<T> == OTHER)                                                   \
-                                        throw "unspported type in container"                                        \
+#define CHECK_VALID_ONE             if(is_valid_type<T> == OTHER && !is_user_defined<T>::ret)                       \
+                                        throw "unspported type in container"
 
 struct Seel{
     template <typename T>
@@ -32,14 +36,21 @@ struct Seel{
     Seel(const std::pair<T,K>&);
 
     template <typename T>
-    Seel(const std::vector<T>& data){CONTAINER_SINGLE}
+    Seel(const std::vector<T>& data){return_type = Type::VECTOR; CONTAINER_SINGLE}
     template <typename T>
-    Seel(const std::list<T>& data){CONTAINER_SINGLE}
+    Seel(const std::list<T>& data){return_type = Type::LIST;CONTAINER_SINGLE}
     template <typename T>
-    Seel(const std::set<T>& data){CONTAINER_SINGLE}
+    Seel(const std::set<T>& data){return_type = Type::SET;CONTAINER_SINGLE}
 
     template <typename T,typename K>
     Seel(const std::map<T,K>&);
+
+    Seel(){}
+
+/*
+    template <typename T>
+    Seel(const Packer<T>&); //
+*/
 
     ~Seel(){ if(data_) delete[] data_;}
 
@@ -65,7 +76,8 @@ struct Seel{
 
     private:
         template <typename T>
-        size_t serialize_stl(const T& data);
+        inline size_t serialize_stl(const T& data);                 // inline
+        size_t serialize_seel(const Seel& data);
         void reset(){
             delete[] data_;
         }
@@ -79,12 +91,84 @@ struct Seel{
     char* data_;            // binary of the object
 };
 
-// default Seel ctor, for atomic types
+// default Seel ctor, for user_defined types
 template <typename T>
-Seel::Seel(const T& data): return_type(is_valid_type<T>), meta_num(1), atom_size(sizeof(T)),data_(nullptr) {
-    data_ = new char[atom_size*meta_num];
-    memcpy(data_,&data,atom_size);
+Seel::Seel(const T& data): return_type(is_valid_type<T>), meta_num(0), atom_size(0),data_(nullptr){
+    // TODO _GETINFO()
+    TypeInfo info = data._GETINFO();
+    meta_num = info.members;
+
+    // TODO loop unrolling
+    /*
+    for(int i = 0; i< meta_num ;i++){
+        temp[i] = Seel( T.FUN (i));
+
+        serialize_seel(Seel( T.FUN (i)));
+    }
+    */
+    if(0 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(0)));
+    if(1 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(1)));
+    if(2 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(2)));
+    if(3 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(3)));
+    if(4 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(4)));
+    if(5 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(5)));
+    if(6 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(6)));
+    if(7 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(7)));
+    if(8 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(8)));
+    if(9 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(9)));
+    if(10 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(10)));
+    if(11 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(11)));
+    if(12 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(12)));
+    if(13 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(13)));
+    if(14 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(14)));
+    if(15 == meta_num)
+        return ;
+    serialize_seel(Seel(data.FUN(15)));
 }
+
+template <>
+Seel::Seel(const bool& data):return_type(Type::BOOL), meta_num(1), atom_size(sizeof(bool)),data_(nullptr){ATMOIC_CTOR}
+
+template <>
+Seel::Seel(const char& data):return_type(Type::CHAR), meta_num(1), atom_size(sizeof(char)),data_(nullptr){ATMOIC_CTOR}
+
+template <>
+Seel::Seel(const int& data):return_type(Type::INT), meta_num(1), atom_size(sizeof(int)),data_(nullptr){ATMOIC_CTOR}
+
+template <>
+Seel::Seel(const float& data):return_type(Type::FLOAT), meta_num(1), atom_size(sizeof(float)),data_(nullptr){ATMOIC_CTOR}
+
+
 
 // Seel ctor for string class
 template<>
@@ -114,17 +198,23 @@ Seel::Seel(const std::map<T,K>& data): return_type(MAP), meta_num(data.size()), 
     }
 }
 
+
 template <typename T>
 size_t Seel::serialize_stl(const T& data){
     Seel sub(data);
+    return serialize_seel(sub);
+}
+
+size_t Seel::serialize_seel(const Seel& sub){
     char* temp = nullptr;
     char tmp;
     size_t space = sub.getbytes();
     if(atom_size){
         temp = new char[atom_size];
         memcpy(temp,data_,atom_size);
+        delete[] data_;
     }
-    delete[] data_;
+    
     data_ = new char[atom_size+space];
     memcpy(data_,temp,atom_size);
     sub.writebytes(data_+atom_size);
@@ -156,7 +246,10 @@ size_t Seel::writebytes(char* buf) const{
 }
 size_t Seel::getbytes() const{
     if(return_type<=STRING)
-        return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+meta_num*atom_size;
+        if(return_type == OTHER)
+            return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+atom_size;
+        else
+            return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+meta_num*atom_size;
     else
         return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+atom_size;
 }
