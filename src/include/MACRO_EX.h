@@ -1,6 +1,7 @@
 #ifndef MACRO_EX_H
 #define MACRO_EX_H
 #include "Typefigure.h"
+#include <type_traits>
 
 /*
 template <typename T>
@@ -10,6 +11,7 @@ int Checks() {return 0; }
 */
 
 int _GLOBALD = 0;
+bool _OUT_OF_RANGE = false;
 #define Checks(...) _Checks(temp,##__VA_ARGS__,_GLOBALD)
 #define _Checks(T,K, ...) K
 
@@ -62,22 +64,22 @@ int _GLOBALD = 0;
 #define _S_EXPAND_DEFINE_16(T, ...) _EXPAND_DEFINE_16(T,__VA_ARGS__)
 
 
-#define _EXPAND_UPPER_1 bool _FUN1() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_2
-#define _EXPAND_UPPER_2 bool _FUN2() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_3
-#define _EXPAND_UPPER_3 bool _FUN3() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_4
-#define _EXPAND_UPPER_4 bool _FUN4() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_5
-#define _EXPAND_UPPER_5 bool _FUN5() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_6
-#define _EXPAND_UPPER_6 bool _FUN6() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_7
-#define _EXPAND_UPPER_7 bool _FUN7() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_8
-#define _EXPAND_UPPER_8 bool _FUN8() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_9
-#define _EXPAND_UPPER_9 bool _FUN9() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_10
-#define _EXPAND_UPPER_10 bool _FUN10() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_11
-#define _EXPAND_UPPER_11 bool _FUN11() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_12
-#define _EXPAND_UPPER_12 bool _FUN12() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_13
-#define _EXPAND_UPPER_13 bool _FUN13() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_14
-#define _EXPAND_UPPER_14 bool _FUN14() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_15
-#define _EXPAND_UPPER_15 bool _FUN15() {throw std::out_of_range("has no method it points to"); return false;} _EXPAND_UPPER_16
-#define _EXPAND_UPPER_16 bool _FUN16() {throw std::out_of_range("has no method it points to"); return false;} 
+#define _EXPAND_UPPER_1 bool& _FUN1() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_2
+#define _EXPAND_UPPER_2 bool& _FUN2() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_3
+#define _EXPAND_UPPER_3 bool& _FUN3() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_4
+#define _EXPAND_UPPER_4 bool& _FUN4() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_5
+#define _EXPAND_UPPER_5 bool& _FUN5() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_6
+#define _EXPAND_UPPER_6 bool& _FUN6() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_7
+#define _EXPAND_UPPER_7 bool& _FUN7() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_8
+#define _EXPAND_UPPER_8 bool& _FUN8() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_9
+#define _EXPAND_UPPER_9 bool& _FUN9() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_10
+#define _EXPAND_UPPER_10 bool& _FUN10() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_11
+#define _EXPAND_UPPER_11 bool& _FUN11() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_12
+#define _EXPAND_UPPER_12 bool& _FUN12() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_13
+#define _EXPAND_UPPER_13 bool& _FUN13() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_14
+#define _EXPAND_UPPER_14 bool& _FUN14() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_15
+#define _EXPAND_UPPER_15 bool& _FUN15() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} _EXPAND_UPPER_16
+#define _EXPAND_UPPER_16 bool& _FUN16() {throw std::out_of_range("has no method it points to"); return _OUT_OF_RANGE;} 
 
 
 #define FUN(i) _FUN##i()
@@ -127,5 +129,24 @@ int _GLOBALD = 0;
                                 temp.func[4] = &NAME::_FUN4;        temp.func[5] = &NAME::_FUN5;        temp.func[6] = &NAME::_FUN6;        temp.func[7] = &NAME::_FUN7;    \
                                 temp.func[8] = &NAME::_FUN8;        temp.func[9] = &NAME::_FUN9;        temp.func[10] = &NAME::_FUN10;      temp.func[11] = &NAME::_FUN11;  \
                                 temp.func[12] = &NAME::_FUN12;      temp.func[13] = &NAME::_FUN13;      temp.func[14] = &NAME::_FUN14;      temp.func[15] = &NAME::_FUN15;
+
+template <int N>
+struct Getmember{
+    ;
+};
+
+// need constant value to specialize
+template <>
+struct Getmember<1>{
+    template <typename U>
+    static auto value(U& src){
+        return src.FUN(1);
+    }
+    
+};
+
+
+
+
 
 #endif

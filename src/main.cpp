@@ -142,10 +142,20 @@ struct Demo{
 void test_usrdefined(){
     Demo src,des;
     src.Init_r();
-    std::cout << "_FUN0() == " << src._FUN1() << std::endl;
-    std::cout << "_FUN1() == " << src._FUN2() << std::endl;
-    std::cout << "_FUN2() == " << src._FUN3() << std::endl;
+    try{
+    std::cout << "_FUN1() == " << src._FUN1() << std::endl;
+    std::cout << "_FUN2() == " << src._FUN2() << std::endl;
+    std::cout << "_FUN3() == " << src._FUN3() << std::endl;
+    
+    //for(int i = 1;i<=3;i++)
+    std::cout << " Getmember<1>::value(src) = " << Getmember<1>::value(src) << std::endl;
+
+    std::cout << "_FUN4() == " << src._FUN5() << std::endl;
+
+    }catch(std::out_of_range& e){
+        std::cout << e.what() << std::endl;
+    }
     binary::serialize(src,"se.bin");
-    binary::deserialize(des,"se.bin");
+    //binary::deserialize(des,"se.bin");
     std::cout << TOSTRING(Demo) << (src == des) << std::endl; 
 }
