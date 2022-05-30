@@ -58,6 +58,7 @@ int main(){
         User you;
         you.id = 3000;
         you.gpa.push_back("yseokk!");
+        you.sub.check = 2;
         binary::serialize(me,"se.bin");
         binary::deserialize(you,"se.bin");
         std::cout <<"Juddge me and you: " << (me == you) << std::endl;

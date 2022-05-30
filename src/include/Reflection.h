@@ -41,6 +41,17 @@ struct TypeInfo{
     std::vector<unsigned int> offset;
 };
 
+struct User_sub{
+    User_sub(){check = 1;}
+    ~User_sub(){}
+    bool operator==(const User_sub& rhs){
+        return (check == rhs.check);
+    }
+    REFLECT(User_sub,
+            float , check);
+};
+
+
 struct User{
     User(){
         id = 3200;
@@ -58,8 +69,11 @@ struct User{
     REFLECT(User,
         int, id,
         int, age,
-        std::vector<std::string>, gpa);
+        std::vector<std::string>, gpa,
+        User_sub, sub);
 };
+
+
 template <typename U>
 struct is_user_defined{
     
