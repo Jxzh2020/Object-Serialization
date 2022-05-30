@@ -55,7 +55,12 @@ int main(){
     std::cout << "Fine, testing usrdefined type! " << std::endl;
     try{
         Seel temp(me);
+        User you;
+        you.id = 3000;
+        you.gpa.push_back("yseokk!");
         binary::serialize(me,"se.bin");
+        binary::deserialize(you,"se.bin");
+        std::cout <<"Juddge me and you: " << (me == you) << std::endl;
     }catch(const char* tmp){
         std::string temp = tmp;
         std::cout <<is_user_defined<User>::ret <<"*********ERROR*********** ::" << temp << std::endl;

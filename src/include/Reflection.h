@@ -48,6 +48,13 @@ struct User{
         gpa = {"good", "second"};
     }
     ~User(){}
+    bool operator==(const User& rhs){
+        if(id == rhs.id)
+            if(age == rhs.age)
+                if(gpa == rhs.gpa)
+                    return true;
+        return false;
+    }
     REFLECT(User,
         int, id,
         int, age,
