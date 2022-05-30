@@ -38,7 +38,8 @@ int main(){
     test_list();
     test_set();
     test_map();
-    //test_usrdefined();
+    test_usrdefined();
+    /*
     User me;
     std::cout << me.age << std::endl;
     std::cout << me._GETINFO().members << std::endl;
@@ -58,7 +59,7 @@ int main(){
         User you;
         you.id = 3000;
         you.gpa.push_back("yseokk!");
-        you.sub.check = 2;
+        you.sub[1] = 1.5;
         binary::serialize(me,"se.bin");
         binary::deserialize(you,"se.bin");
         std::cout <<"Juddge me and you: " << (me == you) << std::endl;
@@ -66,7 +67,7 @@ int main(){
         std::string temp = tmp;
         std::cout <<is_user_defined<User>::ret <<"*********ERROR*********** ::" << temp << std::endl;
     }
-    
+    */
 
     return 0;
 }
@@ -132,19 +133,18 @@ struct Demo{
         return false;
     }
     REFLECT(Demo,
-            int, id,
-            float, ratio,
-            std::string, name,
-            std::vector<std::string>, token)
+            (int), id,
+            (float), ratio,
+            (std::string), name,
+            (std::vector<std::string>), token)
 };
 
 void test_usrdefined(){
     Demo src,des;
     src.Init_r();
-    std::cout << "_FUN0() == " << src._FUN0() << std::endl;
-    std::cout << "_FUN1() == " << src._FUN1() << std::endl;
-    std::cout << "_FUN2() == " << src._FUN2() << std::endl;
-    std::cout << "_FUN15() == " << src._FUN15() << std::endl;
+    std::cout << "_FUN0() == " << src._FUN1() << std::endl;
+    std::cout << "_FUN1() == " << src._FUN2() << std::endl;
+    std::cout << "_FUN2() == " << src._FUN3() << std::endl;
     binary::serialize(src,"se.bin");
     binary::deserialize(des,"se.bin");
     std::cout << TOSTRING(Demo) << (src == des) << std::endl; 

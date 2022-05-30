@@ -111,13 +111,11 @@ Seel::Seel(const T& data_): return_type(is_valid_type<T>), meta_num(0), atom_siz
     T data = data_;
 
     // TODO loop unrolling
-    /*
-    for(int i = 0; i< meta_num ;i++){
-        temp[i] = Seel( T.FUN (i));
-
-        serialize_seel(Seel( T.FUN (i)));
+    
+    for(int i = 1; i<= meta_num ;i++){
+        serialize_seel(Seel(data.FUN(i)));
     }
-    */
+    /*
     if(0 == meta_num)
         return ;
     serialize_seel(Seel(data.FUN(0)));
@@ -166,6 +164,7 @@ Seel::Seel(const T& data_): return_type(is_valid_type<T>), meta_num(0), atom_siz
     if(15 == meta_num)
         return ;
     serialize_seel(Seel(data.FUN(15)));
+    */
 }
 
 template <>
@@ -273,54 +272,59 @@ bool Seel::writeback(T& des){
     size_t step = 0;
     size_t atom_size;
     int meta_num;
+    for(int i = 1;i<=members;i++){
+        step+=load(des.FUN(i),data_+step);
+    }
+    /*
     if(0 == members)
         return false;
-    step+=load(des.FUN(0),data_+step);
+    step+=load(des.FUN(1),data_+step);
     if(1 == members)
         return true;
-    step+=load(des.FUN(1),data_+step);
+    step+=load(des.FUN(2),data_+step);
     if(2 == members)
         return true;
-    step+=load(des.FUN(2),data_+step);
+    step+=load(des.FUN(3),data_+step);
     if(3 == members)
         return true;
-    step+=load(des.FUN(3),data_+step); 
+    step+=load(des.FUN(4),data_+step); 
     if(4 == members)
         return true;
-    step+=load(des.FUN(4),data_+step); 
+    step+=load(des.FUN(5),data_+step); 
     if(5 == members)
         return true;
-    step+=load(des.FUN(5),data_+step); 
+    step+=load(des.FUN(6),data_+step); 
     if(6 == members)
         return true;
-    step+=load(des.FUN(6),data_+step); 
+    step+=load(des.FUN(7),data_+step); 
     if(7 == members)
         return true;
-    step+=load(des.FUN(7),data_+step); 
+    step+=load(des.FUN(8),data_+step); 
     if(8 == members)
         return true;
-    step+=load(des.FUN(8),data_+step); 
+    step+=load(des.FUN(9),data_+step); 
     if(9 == members)
         return true;
-    step+=load(des.FUN(9),data_+step); 
+    step+=load(des.FUN(10),data_+step); 
     if(10 == members)
         return true;
-    step+=load(des.FUN(10),data_+step); 
+    step+=load(des.FUN(11),data_+step); 
     if(11 == members)
         return true;
-    step+=load(des.FUN(11),data_+step); 
+    step+=load(des.FUN(12),data_+step); 
     if(12 == members)
         return true;
-    step+=load(des.FUN(12),data_+step); 
+    step+=load(des.FUN(13),data_+step); 
     if(13 == members)
         return true;
-    step+=load(des.FUN(13),data_+step); 
+    step+=load(des.FUN(14),data_+step); 
     if(14 == members)
         return true;
-    step+=load(des.FUN(14),data_+step);
+    step+=load(des.FUN(15),data_+step);
     if(15 == members)
         return true;
-    step+=load(des.FUN(15),data_+step);
+    step+=load(des.FUN(16),data_+step);
+    */
     return true;
 }
 

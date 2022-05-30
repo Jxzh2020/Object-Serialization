@@ -2,6 +2,7 @@
 #define USER_DEFINED_H
 #include <string>
 #include <vector>
+#include <map>
 #include "Seel.h"
 #include "Typefigure.h"
 #include "MACRO_EX.h"
@@ -19,18 +20,17 @@
 
 
 
-#define EXPANSION_ALL(...)      EXPAND_DEFINE(__VA_ARGS__)
 
 #define _WRAP(T, ...) PUSH_FIELDS_##T(__VA_ARGS__)
 
 
-#define REFLECT(_structname, ...)           EXPANSION_ALL(__VA_ARGS__)                                              \
+#define REFLECT(_structname, ...)           EXPAND_DEFINE(ArgCount(__VA_ARGS__), __VA_ARGS__)                       \
                                             TypeInfo _GETINFO()const{                                               \
                                             TypeInfo temp;                                                          \
                                             unsigned int offset = 0;                                                \
                                             temp.members = ArgCount(__VA_ARGS__);                                   \
                                             temp.name = TOSTRING(_structname);                                      \
-                                            PUSH_FIELDS(__VA_ARGS__)                                                \
+                                            PUSH_FIELDS(ArgCount(__VA_ARGS__),__VA_ARGS__)                          \
                                             return temp;}
 
 struct TypeInfo{
@@ -48,7 +48,13 @@ struct User_sub{
         return (check == rhs.check);
     }
     REFLECT(User_sub,
-            float , check);
+            (float) , check);
+
+
+        
+            
+ 
+
 };
 
 
@@ -67,10 +73,11 @@ struct User{
         return false;
     }
     REFLECT(User,
-        int, id,
-        int, age,
-        std::vector<std::string>, gpa,
-        User_sub, sub);
+        (int), id,
+        (int), age,
+        (std::vector<std::string>), gpa,
+        (std::map<int,float>), sub);
+
 };
 
 
