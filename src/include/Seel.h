@@ -258,7 +258,7 @@ size_t Seel::writebytes(char* buf) const{
     memcpy(buf+step,(char*)&meta_num,sizeof(int32_t)+sizeof(size_t));
     step+=sizeof(int32_t)+sizeof(size_t);
     //
-    if(return_type<= STRING){
+    if(return_type == STRING){
         memcpy(buf+step,data_,meta_num*atom_size);
         step+=meta_num*atom_size;
     }

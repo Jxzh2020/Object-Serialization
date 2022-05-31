@@ -42,7 +42,7 @@ int main(){
     test_map();
     */
     test_usrdefined();
-    /*
+    
     User me;
     std::cout << me.age << std::endl;
     std::cout << me._GETINFO().members << std::endl;
@@ -58,7 +58,7 @@ int main(){
 
     std::cout << "Fine, testing usrdefined type! " << std::endl;
     try{
-        Seel temp(me);
+        //Seel temp(me);
         User you;
         you.id = 3000;
         you.gpa.push_back("yseokk!");
@@ -70,7 +70,7 @@ int main(){
         std::string temp = tmp;
         std::cout <<is_user_defined<User>::ret <<"*********ERROR*********** ::" << temp << std::endl;
     }
-    */
+    
 
     return 0;
 }
