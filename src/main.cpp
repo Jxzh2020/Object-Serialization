@@ -22,22 +22,25 @@ struct Demo;
 void test_usrdefined();
 
 int main(){
-    
+    /*
     testbin<bool>();
     testbin<char>();
     testbin<int>();
     testbin<float>();
+    */
     
     //std::cout << is_user_defined<bool>::ret << is_user_defined<int>::ret<<"_end" << std::endl;
-    testbin<std::string>();
-    getchar();
+    //testbin<std::string>();
+    //getchar();
     std::cout << "DEBUG" << std::endl;
+    /*
     getchar();
     test_pair();
     test_vector();
     test_list();
     test_set();
     test_map();
+    */
     test_usrdefined();
     /*
     User me;
@@ -115,11 +118,12 @@ void test_map(){
 
 
 struct Demo{
-    Demo(){}
+    Demo(){}//id =0; ratio = 0; name = "K"; token.push_back("k");}
     void Init_r(){
         id = 1;
         ratio = 3.1415926535;
         name = "Pass test!";
+        token.clear();
         token.push_back("item[1]");
         token.push_back("item[2]");
         token.push_back("item[3]");
@@ -142,6 +146,7 @@ struct Demo{
 void test_usrdefined(){
     Demo src,des;
     src.Init_r();
+    //des.Init_r();
     try{
     std::cout << "_FUN1() == " << src._FUN1() << std::endl;
     std::cout << "_FUN2() == " << src._FUN2() << std::endl;
@@ -150,12 +155,13 @@ void test_usrdefined(){
     //for(int i = 1;i<=3;i++)
     std::cout << " Getmember<1>::value(src) = " << Getmember<1>::value(src) << std::endl;
 
-    std::cout << "_FUN4() == " << src._FUN5() << std::endl;
+    //std::cout << "_FUN4() == " << src._FUN5() << std::endl;
 
     }catch(std::out_of_range& e){
         std::cout << e.what() << std::endl;
     }
     binary::serialize(src,"se.bin");
-    //binary::deserialize(des,"se.bin");
+    std::cout << "Serialization completed!" << std::endl;
+    binary::deserialize(des,"se.bin");
     std::cout << TOSTRING(Demo) << (src == des) << std::endl; 
 }

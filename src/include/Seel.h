@@ -109,6 +109,7 @@ Seel::Seel(const T& data_): return_type(is_valid_type<T>), meta_num(0), atom_siz
     meta_num = info.members;
     // TODO a copy that can be avoided
     T data = data_;
+    
 
     // TODO loop unrolling
     /*
@@ -116,17 +117,23 @@ Seel::Seel(const T& data_): return_type(is_valid_type<T>), meta_num(0), atom_siz
         serialize_seel(Seel(data.FUN(i)));
     }
     */
+   std::cout << "in Seel ! meta_num = " << meta_num << std::endl;
     if(0 == meta_num)
         return ;
+        std::cout << "copy ..1" << std::endl;
     serialize_seel(Seel(data.FUN(1)));
     if(1 == meta_num)
         return ;
+        std::cout << "copy ..2" << data.FUN(2) <<std::endl;
+        
     serialize_seel(Seel(data.FUN(2)));
     if(2 == meta_num)
         return ;
+        std::cout << "copy ..3" << std::endl;
     serialize_seel(Seel(data.FUN(3)));
     if(3 == meta_num)
         return ;
+        std::cout << "copy ..4" << std::endl;
     serialize_seel(Seel(data.FUN(4)));
     if(4 == meta_num)
         return ;
@@ -217,19 +224,27 @@ size_t Seel::serialize_stl(const T& data){
 }
 
 size_t Seel::serialize_seel(const Seel& sub){
+    std::cout << "serlize seel" << std::endl;
     char* temp = nullptr;
     char tmp;
     size_t space = sub.getbytes();
+    std::cout <<"getbytes()= " << space << std::endl;
+    std::cout << atom_size << std::endl;
+    //
     if(atom_size){
         temp = new char[atom_size];
+        std::cout <<"new complete "<< std::endl;
         memcpy(temp,data_,atom_size);
         delete[] data_;
     }
-    
+    //
     data_ = new char[atom_size+space];
     memcpy(data_,temp,atom_size);
+    if(temp)
+        delete[] temp;
     sub.writebytes(data_+atom_size);
     atom_size+=space;
+    std::cout << "serlize seel return" << std::endl;
     return space;
 }
 
@@ -427,6 +442,9 @@ size_t Seel::deserialize_frombytes(char* buf){
         total = atom_size;
     this->meta_num = meta_num;
     this->atom_size = atom_size;
+
+    
+    
     data_  = new char[total];
     memcpy(data_,buf+step,total);
     step+=total;
