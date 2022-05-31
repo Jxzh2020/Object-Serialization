@@ -140,12 +140,14 @@ struct Demo{
             (int), id,
             (float), ratio,
             (std::string), name,
-            (std::vector<std::string>), token)
+            (std::vector<std::string>), token,
+            (User), cases);
 };
 
 void test_usrdefined(){
     Demo src,des;
     src.Init_r();
+    src.cases.age = 99;
     //des.Init_r();
     try{
     std::cout << "_FUN1() == " << src._FUN1() << std::endl;
