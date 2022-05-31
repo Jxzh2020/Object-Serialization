@@ -271,11 +271,8 @@ size_t Seel::writebytes(char* buf) const{
     return step;
 }
 size_t Seel::getbytes() const{
-    if(return_type<=STRING)
-        if(return_type == OTHER)
-            return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+atom_size;
-        else
-            return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+meta_num*atom_size;
+    if(return_type == STRING)
+        return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+meta_num*atom_size;
     else
         return sizeof(char)+sizeof(int32_t)+sizeof(size_t)+atom_size;
 }
