@@ -17,6 +17,7 @@ void test_vector();
 void test_list();
 void test_set();
 void test_map();
+void test_xml();
 struct Demo;
 
 void test_usrdefined();
@@ -42,6 +43,7 @@ int main(){
     test_map();
     */
     test_usrdefined();
+    test_xml();
     
     User me;
     std::cout << me.age << std::endl;
@@ -166,4 +168,8 @@ void test_usrdefined(){
     std::cout << "Serialization completed!" << std::endl;
     binary::deserialize(des,"se.bin");
     std::cout << TOSTRING(Demo) << (src == des) << std::endl; 
+}
+
+void test_xml(){
+    ;
 }
