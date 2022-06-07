@@ -117,23 +117,18 @@ Seel::Seel(const T& data_): return_type(is_valid_type<T>), meta_num(0), atom_siz
         serialize_seel(Seel(data.FUN(i)));
     }
     */
-   std::cout << "in Seel ! meta_num = " << meta_num << std::endl;
     if(0 == meta_num)
         return ;
-        std::cout << "copy ..1" << std::endl;
     serialize_seel(Seel(data.FUN(1)));
     if(1 == meta_num)
         return ;
-        std::cout << "copy ..2" << data.FUN(2) <<std::endl;
         
     serialize_seel(Seel(data.FUN(2)));
     if(2 == meta_num)
         return ;
-        std::cout << "copy ..3" << std::endl;
     serialize_seel(Seel(data.FUN(3)));
     if(3 == meta_num)
         return ;
-        std::cout << "copy ..4" << std::endl;
     serialize_seel(Seel(data.FUN(4)));
     if(4 == meta_num)
         return ;
@@ -224,16 +219,12 @@ size_t Seel::serialize_stl(const T& data){
 }
 
 size_t Seel::serialize_seel(const Seel& sub){
-    std::cout << "serlize seel" << std::endl;
     char* temp = nullptr;
     char tmp;
     size_t space = sub.getbytes();
-    std::cout <<"getbytes()= " << space << std::endl;
-    std::cout << atom_size << std::endl;
     //
     if(atom_size){
         temp = new char[atom_size];
-        std::cout <<"new complete "<< std::endl;
         memcpy(temp,data_,atom_size);
         delete[] data_;
     }
@@ -244,7 +235,6 @@ size_t Seel::serialize_seel(const Seel& sub){
         delete[] temp;
     sub.writebytes(data_+atom_size);
     atom_size+=space;
-    std::cout << "serlize seel return" << std::endl;
     return space;
 }
 
@@ -445,7 +435,6 @@ size_t Seel::deserialize_frombytes(char* buf){
     data_  = new char[total];
     memcpy(data_,buf+step,total);
     step+=total;
-    std::cout << "the total bytes are " << step << std::endl;
     return step;
 
 }

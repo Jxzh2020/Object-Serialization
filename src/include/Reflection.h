@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Seel.h"
+//#include "Seel.h"
 #include "Typefigure.h"
 #include "MACRO_EX.h"
 #define TOSTRING(type) #type

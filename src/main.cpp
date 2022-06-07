@@ -7,7 +7,7 @@
 
 #define TEST    binary::serialize(k,"se.bin");                                          \
                 binary::deserialize(j,"se.bin");                                        \
-                std::cout << typeid(k).name() << ": "<< (bool)(k == j) << std::endl;    \
+                std::cout << (bool)(k == j) << std::endl;    \
 
 template<typename T>
 void testbin();
@@ -23,42 +23,28 @@ struct Demo;
 void test_usrdefined();
 
 int main(){
-    /*
+    
     testbin<bool>();
     testbin<char>();
     testbin<int>();
     testbin<float>();
-    */
+    
     
     //std::cout << is_user_defined<bool>::ret << is_user_defined<int>::ret<<"_end" << std::endl;
     //testbin<std::string>();
     //getchar();
-    std::cout << "DEBUG" << std::endl;
-    /*
+    
     getchar();
     test_pair();
     test_vector();
     test_list();
     test_set();
     test_map();
-    */
+    
     test_usrdefined();
     test_xml();
     
     User me;
-    std::cout << me.age << std::endl;
-    std::cout << me._GETINFO().members << std::endl;
-    for(auto &i:me._GETINFO().member_names){
-        std::cout << i << "_end" << std::endl;
-    }
-    for(auto &i:me._GETINFO().member_types){
-        std::cout << i << "_end" << std::endl;
-    }
-    for(auto &i:me.gpa){
-        std::cout << i << "_end" << std::endl;
-    }
-
-    std::cout << "Fine, testing usrdefined type! " << std::endl;
     try{
         //Seel temp(me);
         User you;
@@ -80,7 +66,6 @@ int main(){
 template<typename T>
 void testbin(){
     T k,j;
-    std::cout << "input source data of " << typeid(k).name() << ": " << std::endl;
 
     if(is_user_defined<T>::ret)
         std::cout << "****** has one function!!!!**********" << std::endl;
@@ -165,7 +150,6 @@ void test_usrdefined(){
         std::cout << e.what() << std::endl;
     }
     binary::serialize(src,"se.bin");
-    std::cout << "Serialization completed!" << std::endl;
     binary::deserialize(des,"se.bin");
     std::cout << TOSTRING(Demo) << (src == des) << std::endl; 
 }

@@ -81,11 +81,11 @@ namespace binary{
         if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::ret)
             throw "Not valid type!";
         Buffer buf(file,Buffer::in);
-        std::cout << "Seel not completed!!" <<std::endl;
+
         Seel des_(des);
-        std::cout << "readbin not completed!!" <<std::endl;
+
         buf.readbin(des_);
-        std::cout << "readbin completed!!" <<std::endl;
+
         des_.writeback(des);
         return true;
     }

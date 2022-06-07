@@ -61,11 +61,9 @@ int32_t Buffer::readbin(Seel& parsel){
         
     else
         total = atom_size+sizeof(char)+sizeof(int32_t)+sizeof(size_t);
-    std::cout << "before " << total <<" " << meta_num << " "<< atom_size << std::endl;
     //
     buf = new char[(int)total];
     //
-    std::cout << "after" << std::endl;
     fs.seekg(0,std::ios::beg);
     fs.read(buf,total);
     parsel.deserialize_frombytes(buf);
