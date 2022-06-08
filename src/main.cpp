@@ -7,11 +7,7 @@
 #include "include/Seelxml.h"
 #include "include/ToXML.h"
 
-#define TEST    binary::serialize(k,"se.bin");                                          \
-                binary::deserialize(j,"se.bin");                                        \
-                std::cout << std::boolalpha <<(bool)(k == j) << std::endl;
 
-struct Demo;
 struct User{
     User(){
         id = 3200;
@@ -26,75 +22,13 @@ struct User{
                     return true;
         return false;
     }
-    REFLECT(User,
-        (int), id,
-        (int), age,
-        (std::vector<std::string>), gpa,
-        (std::map<int,float>), sub);
-
+        int id;
+        int age;
+        std::vector<std::string> gpa;
+        std::map<int,float> sub;
 };
-template<typename T>
-void testbin();
-void test_pair();
-void test_vector();
-void test_list();
-void test_set();
-void test_map();
-void test_xml();
-void test_bin();
-void test_usrdefined();
-
-int main(){
-    
-    test_bin();
-    test_xml();
-    
-
-    return 0;
-}
-
-template<typename T>
-void testbin(){
-    T k,j;
-    if(is_user_defined<T>::ret)
-        std::cout << "****** has one function!!!!**********" << std::endl;
-    else
-        std::cout << "****** has no function!!!!**********" << std::endl;
-    std::cin >> k;
-    TEST
-}
-
-
-void test_pair(){
-    std::pair<int, bool> k(5,0),j;
-    TEST
-}
-
-void test_vector(){
-    std::vector<std::string> k{"good", "bad"},j;
-    TEST
-}
-
-void test_list(){
-    std::list<std::vector<std::string>> k{{"good","first"}, {"bad","second"}},j;
-    TEST
-}
-
-void test_set(){
-    std::set<std::string> k{"bad","second"},j;
-    TEST
-}
-
-void test_map(){
-    std::map<int,std::string> k,j;
-    k[1] = "good";
-    TEST
-}
-
-
-
 struct Demo{
-    Demo(){}//id =0; ratio = 0; name = "K"; token.push_back("k");}
+    Demo(){}
     void Init_r(){
         id = 1;
         ratio = 3.1415926535;
@@ -112,66 +46,158 @@ struct Demo{
                         return true;
         return false;
     }
-    REFLECT(Demo,
-            (int), id,
-            (float), ratio,
-            (std::string), name,
-            (std::vector<std::string>), token,
-            (User), cases);
+
+    int id;
+    float ratio;
+    std::string name;
+    std::vector<std::string> token;
+    User cases;
 };
+
+DEFINE_STRUCT_SCHEMA(User,
+                    DEFINE_STRUCT_FIELD(id,"id"),
+                    DEFINE_STRUCT_FIELD(age,"age"),
+                    DEFINE_STRUCT_FIELD(gpa,"gpa"),
+                    DEFINE_STRUCT_FIELD(sub,"sub")
+                    );
+
+void test_bin();
+void test_xml();
+
+
+template<typename T>
+void test_test_bin(T& src){
+    T des;
+    binary::serialize(src,"se.bin");
+    binary::deserialize(des,"se.bin");
+    std::cout << "The test type is " << typeid(T).name() << std::endl;
+    std::cout << std::boolalpha << "The result is " << (bool)(src == des) << std::endl;
+}
+template<typename T>
+void test_test_xml(T& src){
+    T des;
+    xml::serialize(src,"se.xml");
+    getchar();
+    xml::deserialize(des,"se.xml");
+    std::cout << "The test type is " << typeid(T).name() << std::endl;
+    std::cout << std::boolalpha << "The result is " << (bool)(src == des) << std::endl;
+}
+
+
+DEFINE_STRUCT_SCHEMA(Demo,
+                    DEFINE_STRUCT_FIELD(id,"id"),
+                    DEFINE_STRUCT_FIELD(ratio,"ratio"),
+                    DEFINE_STRUCT_FIELD(name,"name"),
+                    DEFINE_STRUCT_FIELD(token,"token"),
+                    DEFINE_STRUCT_FIELD(cases,"cases"));
+
 
 void test_usrdefined(){
     Demo src,des;
     src.Init_r();
     src.cases.age = 99;
     //des.Init_r();
-    try{
-    std::cout << "_FUN1() == " << src._FUN1() << std::endl;
-    std::cout << "_FUN2() == " << src._FUN2() << std::endl;
-    std::cout << "_FUN3() == " << src._FUN3() << std::endl;
-    
-    //for(int i = 1;i<=3;i++)
-    std::cout << " Getmember<1>::value(src) = " << Getmember<1>::value(src) << std::endl;
-
-    //std::cout << "_FUN4() == " << src._FUN5() << std::endl;
-
-    }catch(std::out_of_range& e){
-        std::cout << e.what() << std::endl;
-    }
     binary::serialize(src,"se.bin");
     binary::deserialize(des,"se.bin");
-    std::cout << std::boolalpha <<TOSTRING(Demo) << (src == des) << std::endl; 
+    if(src == des){
+        std::cout << "struct Demo serialized successfully" << std::endl;
+    }
+    
+    std::cout << std::boolalpha << (src == des) << std::endl; 
 }
 
 
 
-void test_xml(){
-    ;
-}
 
 void test_bin(){
-    testbin<bool>();
-    testbin<char>();
-    testbin<int>();
-    testbin<float>();
-    //std::cout << is_user_defined<bool>::ret << is_user_defined<int>::ret<<"_end" << std::endl;
-    testbin<std::string>();
-    //getchar();
-
-    test_pair();
-    test_vector();
-    test_list();
-    test_set();
-    test_map();
     
-    test_usrdefined();
-        User me;
-        //Seel temp(me);
-        User you;
-        you.id = 3000;
-        you.gpa.push_back("yseokk!");
-        you.sub[1] = 1.5;
-        binary::serialize(me,"se.bin");
-        binary::deserialize(you,"se.bin");
-        std::cout <<"Juddge me and you: " << std::boolalpha <<(me == you) << std::endl;
+    
+    bool test_bool = true;
+    char test_char = 'a';
+    int test_int = 32;
+    float test_float = 1.414;
+    std::string test_string = "hello world";
+    std::vector<int> test_vector = {1,2,3};
+    std::list<int> test_list = {4,5,6};
+    std::set<int> test_set = {7,8,9};
+    std::map<int,std::string> test_map = {{1,"how"},{2,"are"},{3,"you"}};
+    std::pair<std::string,std::string> test_pair = {"happy birthday", "to you!"};
+    std::vector<std::list<int>> test_v_l = {test_list,{2,6,8,45,6},{898,7787,5454}};
+    std::map<std::vector<int>,std::string> test_i_m = {{test_vector,"first is here"},{{7,45,88,954,}, "this is the second"}};
+    std::list<std::vector<int>> test_l_v = {{2,6,8,45,6},{898,7787,5454}};
+    /*
+    test_test_bin(test_bool);
+    test_test_bin(test_char);
+    test_test_bin(test_int);
+    test_test_bin(test_float);
+    test_test_bin(test_string);
+    test_test_bin(test_vector);
+    test_test_bin(test_list);
+    test_test_bin(test_set);
+    test_test_bin(test_map);
+    test_test_bin(test_pair);
+    */
+    test_test_bin(test_v_l);
+    /*
+    test_test_bin(test_i_m);
+
+    Demo src,des;
+    src.Init_r();
+    src.cases.age = 99;
+    
+    test_test_bin(src);
+    */
+
+}
+void test_xml(){
+    
+    
+    bool test_bool = true;
+    char test_char = 'a';
+    int test_int = 32;
+    float test_float = 1.414;
+    std::string test_string = "hello world";
+    std::vector<int> test_vector = {1,2,3};
+    std::list<int> test_list = {4,5,6};
+    std::set<int> test_set = {7,8,9};
+    std::map<int,std::string> test_map = {{1,"how"},{2,"are"},{3,"you"}};
+    std::pair<std::string,std::string> test_pair = {"happy birthday", "to you!"};
+    std::vector<std::list<int>> test_v_l = {{2,6,8,45,6},{898,7787,5454}};
+    std::map<std::vector<int>,std::string> test_i_m = {{test_vector,"first is here"},{{7,45,88,954,}, "this is the second"}};
+    std::list<std::vector<int>> test_l_v = {{2,6,8,45,6},{898,7787,5454}};
+    std::set<std::list<int>> test_s_l = {{2,6,8,45,6},{898,7787,5454}};
+    /*
+    test_test_xml(test_bool);
+    test_test_xml(test_char);
+    test_test_xml(test_int);
+    test_test_xml(test_float);
+    test_test_xml(test_string);
+    test_test_xml(test_vector);
+    test_test_xml(test_list);
+    test_test_xml(test_set);
+    test_test_xml(test_map);
+    test_test_xml(test_pair);
+    getchar();
+    */
+    test_test_xml(test_s_l);
+    /*
+    test_test_xml(test_i_m);
+
+    Demo src,des;
+    src.Init_r();
+    src.cases.age = 99;
+    
+    test_test_xml(src);
+    */
+
+}
+
+int main(){
+    std::cout << "\033[35m Starting DIY Binary tests:\033[0m" << std::endl;
+    test_bin();
+    std::cout << "\033[35m The XML tests are as follows\033[0m" << std::endl;
+    test_xml();
+    
+
+    return 0;
 }

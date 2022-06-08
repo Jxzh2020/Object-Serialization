@@ -7,7 +7,7 @@
 #include "Buffer.h"
 #include "Reflection.h"
 #define CONTAINER_SINGLE    meta_num = data.size(); atom_size = 0;data_ = nullptr;                                  \
-                            CHECK_VALID_ONE;    for( auto &i:data) serialize_stl(i);
+                            for( auto &i:data) serialize_stl(i);
                         
 #define ATMOIC_CTOR         data_ = new char[atom_size*meta_num];                                                   \
                             memcpy(data_,&data,atom_size);
@@ -21,14 +21,17 @@
                                         des.push_back(temp);}                                                       \
                                     return true;
 
-#define CHECK_VALID_TWO             if((is_valid_type<T> == OTHER && !is_user_defined<T>::ret) ||                   \
-                                       (is_valid_type<K> == OTHER && !is_user_defined<K>::ret))                     \
-                                        throw "unspported type in container"
+#define CHECK_VALID_TWO  
 
-#define CHECK_VALID_ONE             if(is_valid_type<T> == OTHER && !is_user_defined<T>::ret)                       \
-                                        throw "unspported type in container"
+
+#define CHECK_VALID_ONE 
+
 
 struct Seel{
+
+    Seel(){}
+    ~Seel(){ if(data_) delete[] data_;}
+
     template <typename T>
     Seel(const T& data);
 
@@ -45,14 +48,7 @@ struct Seel{
     template <typename T,typename K>
     Seel(const std::map<T,K>&);
 
-    Seel(){}
-
-/*
-    template <typename T>
-    Seel(const Packer<T>&); //
-*/
-
-    ~Seel(){ if(data_) delete[] data_;}
+    
 
     template <typename T>
     bool writeback(T& des);
@@ -104,65 +100,12 @@ struct Seel{
 // default Seel ctor, for user_defined types
 template <typename T>
 Seel::Seel(const T& data_): return_type(is_valid_type<T>), meta_num(0), atom_size(0),data_(nullptr){
-    // TODO _GETINFO()
-
-    TypeInfo info = data_._GETINFO();
-    meta_num = info.members;
-
-    // TODO a copy that can be avoided
-    T data = data_;
-    
-
-    if(0 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(1)));
-    if(1 == meta_num)
-        return ;
-        
-    serialize_seel(Seel(data.FUN(2)));
-    if(2 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(3)));
-    if(3 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(4)));
-    if(4 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(5)));
-    if(5 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(6)));
-    if(6 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(7)));
-    if(7 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(8)));
-    if(8 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(9)));
-    if(9 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(10)));
-    if(10 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(12)));
-    if(11 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(12)));
-    if(12 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(13)));
-    if(13 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(14)));
-    if(14 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(15)));
-    if(15 == meta_num)
-        return ;
-    serialize_seel(Seel(data.FUN(16)));
-    
+    Seel* k = this;
+    for(int i=0;i< std::tuple_size<std::decay_t<decltype(struct_schema<T>)>>::value;i++){
+            ForEachField(data_,i,[&k](auto& field, auto& name){
+                k->serialize_seel(Seel(field));
+            });
+        }
 }
 
 template <>
@@ -265,62 +208,14 @@ size_t Seel::getbytes() const{
 
 template <typename T>
 bool Seel::writeback(T& des){
-    int members = des._GETINFO().members;
-    char chk;
     size_t step = 0;
-    size_t atom_size;
-    int meta_num;
-    
-    
-    if(0 == members)
-        return false;
-    step+=load(des.FUN(1),data_+step);
-    if(1 == members)
-        return true;
-    step+=load(des.FUN(2),data_+step);
-    if(2 == members)
-        return true;
-    step+=load(des.FUN(3),data_+step);
-    if(3 == members)
-        return true;
-    step+=load(des.FUN(4),data_+step); 
-    if(4 == members)
-        return true;
-    step+=load(des.FUN(5),data_+step); 
-    if(5 == members)
-        return true;
-    step+=load(des.FUN(6),data_+step); 
-    if(6 == members)
-        return true;
-    step+=load(des.FUN(7),data_+step); 
-    if(7 == members)
-        return true;
-    step+=load(des.FUN(8),data_+step); 
-    if(8 == members)
-        return true;
-    step+=load(des.FUN(9),data_+step); 
-    if(9 == members)
-        return true;
-    step+=load(des.FUN(10),data_+step); 
-    if(10 == members)
-        return true;
-    step+=load(des.FUN(11),data_+step); 
-    if(11 == members)
-        return true;
-    step+=load(des.FUN(12),data_+step); 
-    if(12 == members)
-        return true;
-    step+=load(des.FUN(13),data_+step); 
-    if(13 == members)
-        return true;
-    step+=load(des.FUN(14),data_+step); 
-    if(14 == members)
-        return true;
-    step+=load(des.FUN(15),data_+step);
-    if(15 == members)
-        return true;
-    step+=load(des.FUN(16),data_+step);
-    
+    Seel* temp = this;
+    char* tmp = data_;
+    for(int i=0;i< std::tuple_size<std::decay_t<decltype(struct_schema<T>)>>::value;i++){
+            ForEachField(des,i,[&step, &tmp, &temp](auto& field, auto& name){
+                step+= temp->load(field, tmp+step);
+            });
+        }
     return true;
 }
 
@@ -335,9 +230,6 @@ bool Seel::writeback(int& des){ memcpy((char*)&des,data_,meta_num*atom_size); re
 
 template <>
 bool Seel::writeback(float& des){ memcpy((char*)&des,data_,meta_num*atom_size); return true; }
-
-
-
 
 // write back string
 template <>
@@ -413,8 +305,6 @@ size_t Seel::deserialize_frombytes(char* buf){
     memcpy((char* )&atom_size,buf+step,sizeof(size_t));
     step+=sizeof(size_t);
     
-
-
     if(return_type == STRING)
         total = meta_num*atom_size;
     else
@@ -422,8 +312,6 @@ size_t Seel::deserialize_frombytes(char* buf){
     this->meta_num = meta_num;
     this->atom_size = atom_size;
 
-    
-    
     data_  = new char[total];
     memcpy(data_,buf+step,total);
     step+=total;

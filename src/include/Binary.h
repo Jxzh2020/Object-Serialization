@@ -50,36 +50,20 @@ namespace binary{
 
     template <class T>
     bool serialize(const T& src_, const std::string& file){
-        if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::ret)
-            throw "Not valid type! at serialize()";
+        // if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::ret)
+        //     throw "Not valid type! at serialize()";
 
         Buffer buf(file,Buffer::out);
-
         Seel data(src_);
         buf.writebin(data);
 
-        
         return true;
     }
-
-/*
-    template <typename T>
-    bool serialize(const Packer<T>& src_, const std::string& file){
-        if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::ret)
-            throw "Not valid type!";
-
-        Buffer buf(file,Buffer::out);
-
-        Seel data(src_);
-
-        return true;
-    }
-*/
 
     template <class T>
     bool deserialize(T& des, const std::string& file){
-        if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::ret)
-            throw "Not valid type!";
+        // if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::ret)
+        //     throw "Not valid type!";
         Buffer buf(file,Buffer::in);
 
         Seel des_(des);
@@ -87,19 +71,8 @@ namespace binary{
         buf.readbin(des_);
 
         des_.writeback(des);
+        
         return true;
-    }
-
-    // TODO xml
-    template <class T>
-    unsigned int serialize_xml(T&, const std::string& ,const std::string&){
-        return 0;
-    }
-
-    // TODO xml
-    template <class T>
-    unsigned int deserialize_xml(T&, const std::string& ,const std::string&){
-        return 0;
     }
 }
 

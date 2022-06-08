@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Serializer>
+    <std_set>
+        <std_list>
+            <int value="2"/>
+            <int value="6"/>
+            <int value="8"/>
+            <int value="45"/>
+            <int value="6"/>
+        </std_list>
+        <std_list>
+            <int value="898"/>
+            <int value="7787"/>
+            <int value="5454"/>
+        </std_list>
+    </std_set>
+</Serializer>
