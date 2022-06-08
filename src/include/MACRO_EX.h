@@ -135,15 +135,14 @@ struct Getmember{
     ;
 };
 
-// need constant value to specialize
 template <>
 struct Getmember<1>{
     template <typename U>
     static auto value(U& src){
         return src.FUN(1);
     }
-    
 };
+
 
 
 

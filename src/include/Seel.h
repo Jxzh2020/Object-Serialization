@@ -105,18 +105,14 @@ struct Seel{
 template <typename T>
 Seel::Seel(const T& data_): return_type(is_valid_type<T>), meta_num(0), atom_size(0),data_(nullptr){
     // TODO _GETINFO()
+
     TypeInfo info = data_._GETINFO();
     meta_num = info.members;
+
     // TODO a copy that can be avoided
     T data = data_;
     
 
-    // TODO loop unrolling
-    /*
-    for(int i = 1; i<= meta_num ;i++){
-        serialize_seel(Seel(data.FUN(i)));
-    }
-    */
     if(0 == meta_num)
         return ;
     serialize_seel(Seel(data.FUN(1)));
@@ -274,11 +270,7 @@ bool Seel::writeback(T& des){
     size_t step = 0;
     size_t atom_size;
     int meta_num;
-    /*
-    for(int i = 1;i<=members;i++){
-        step+=load(des.FUN(i),data_+step);
-    }
-    */
+    
     
     if(0 == members)
         return false;

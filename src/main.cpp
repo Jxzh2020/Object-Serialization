@@ -4,60 +4,50 @@
 #include "include/Binary.h"
 #include "include/Reflection.h"
 #include "include/Seel.h"
+#include "include/Seelxml.h"
+#include "include/ToXML.h"
 
 #define TEST    binary::serialize(k,"se.bin");                                          \
                 binary::deserialize(j,"se.bin");                                        \
-                std::cout << (bool)(k == j) << std::endl;    \
+                std::cout << std::boolalpha <<(bool)(k == j) << std::endl;
 
+struct Demo;
+struct User{
+    User(){
+        id = 3200;
+        age = 20;
+        gpa = {"good", "second"};
+    }
+    ~User(){}
+    bool operator==(const User& rhs){
+        if(id == rhs.id)
+            if(age == rhs.age)
+                if(gpa == rhs.gpa)
+                    return true;
+        return false;
+    }
+    REFLECT(User,
+        (int), id,
+        (int), age,
+        (std::vector<std::string>), gpa,
+        (std::map<int,float>), sub);
+
+};
 template<typename T>
 void testbin();
-
 void test_pair();
 void test_vector();
 void test_list();
 void test_set();
 void test_map();
 void test_xml();
-struct Demo;
-
+void test_bin();
 void test_usrdefined();
 
 int main(){
     
-    testbin<bool>();
-    testbin<char>();
-    testbin<int>();
-    testbin<float>();
-    
-    
-    //std::cout << is_user_defined<bool>::ret << is_user_defined<int>::ret<<"_end" << std::endl;
-    //testbin<std::string>();
-    //getchar();
-    
-    getchar();
-    test_pair();
-    test_vector();
-    test_list();
-    test_set();
-    test_map();
-    
-    test_usrdefined();
+    test_bin();
     test_xml();
-    
-    User me;
-    try{
-        //Seel temp(me);
-        User you;
-        you.id = 3000;
-        you.gpa.push_back("yseokk!");
-        you.sub[1] = 1.5;
-        binary::serialize(me,"se.bin");
-        binary::deserialize(you,"se.bin");
-        std::cout <<"Juddge me and you: " << (me == you) << std::endl;
-    }catch(const char* tmp){
-        std::string temp = tmp;
-        std::cout <<is_user_defined<User>::ret <<"*********ERROR*********** ::" << temp << std::endl;
-    }
     
 
     return 0;
@@ -66,7 +56,6 @@ int main(){
 template<typename T>
 void testbin(){
     T k,j;
-
     if(is_user_defined<T>::ret)
         std::cout << "****** has one function!!!!**********" << std::endl;
     else
@@ -151,9 +140,38 @@ void test_usrdefined(){
     }
     binary::serialize(src,"se.bin");
     binary::deserialize(des,"se.bin");
-    std::cout << TOSTRING(Demo) << (src == des) << std::endl; 
+    std::cout << std::boolalpha <<TOSTRING(Demo) << (src == des) << std::endl; 
 }
+
+
 
 void test_xml(){
     ;
+}
+
+void test_bin(){
+    testbin<bool>();
+    testbin<char>();
+    testbin<int>();
+    testbin<float>();
+    //std::cout << is_user_defined<bool>::ret << is_user_defined<int>::ret<<"_end" << std::endl;
+    testbin<std::string>();
+    //getchar();
+
+    test_pair();
+    test_vector();
+    test_list();
+    test_set();
+    test_map();
+    
+    test_usrdefined();
+        User me;
+        //Seel temp(me);
+        User you;
+        you.id = 3000;
+        you.gpa.push_back("yseokk!");
+        you.sub[1] = 1.5;
+        binary::serialize(me,"se.bin");
+        binary::deserialize(you,"se.bin");
+        std::cout <<"Juddge me and you: " << std::boolalpha <<(me == you) << std::endl;
 }
