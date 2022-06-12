@@ -99,10 +99,10 @@ struct Seel{
 
 // default Seel ctor, for user_defined types
 template <typename T>
-Seel::Seel(const T& data_): return_type(is_valid_type<T>), meta_num(0), atom_size(0),data_(nullptr){
+Seel::Seel(const T& data): return_type(is_valid_type<T>), meta_num(0), atom_size(0),data_(nullptr){
     Seel* k = this;
     for(int i=0;i< std::tuple_size<std::decay_t<decltype(struct_schema<T>)>>::value;i++){
-            ForEachField(data_,i,[&k](auto& field, auto& name){
+            ForField(data,i,[&k](auto& field, auto& name){
                 k->serialize_seel(Seel(field));
             });
         }
@@ -212,7 +212,7 @@ bool Seel::writeback(T& des){
     Seel* temp = this;
     char* tmp = data_;
     for(int i=0;i< std::tuple_size<std::decay_t<decltype(struct_schema<T>)>>::value;i++){
-            ForEachField(des,i,[&step, &tmp, &temp](auto& field, auto& name){
+            ForField(des,i,[&step, &tmp, &temp](auto& field, auto& name){
                 step+= temp->load(field, tmp+step);
             });
         }

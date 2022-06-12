@@ -12,7 +12,7 @@
 #include "../thirdparty/tinyxml2.h"
 #include "Typefigure.h"
 #include "Reflection.h"
-#include "MACRO_EX.h"
+//#include "MACRO_EX.h"
 
 using namespace tinyxml2;
 
@@ -60,7 +60,7 @@ namespace Seelxml{
         XMLElement* sub_root = doc->NewElement(ClassName<T>());
         root->InsertEndChild(sub_root);
         for(int i=0;i< std::tuple_size<std::decay_t<decltype(struct_schema<T>)>>::value;i++){
-            ForEachField(src,i,[&step, &sub_root, &doc](auto& field, auto& name){
+            ForField(src,i,[&step, &sub_root, &doc](auto& field, auto& name){
                 step+= serialize_node(field, doc, sub_root);
             });
         }
@@ -237,7 +237,7 @@ namespace Seelxml{
         XMLElement * sub_root = root->FirstChildElement();
         XMLError L;
         for(int i=0;i< std::tuple_size<std::decay_t<decltype(struct_schema<T>)>>::value;i++){
-            ForEachField(data,i,[&sub_root, &L](auto& field, auto& name){
+            ForField(data,i,[&sub_root, &L](auto& field, auto& name){
                 L = deserialize_node(field, sub_root);
             });
             sub_root = sub_root->NextSiblingElement();
@@ -287,7 +287,7 @@ namespace Seelxml{
     XMLError deserialize(T& src, XMLElement* root){
         XMLElement * sub_root;
         sub_root = root->FirstChildElement();
-        std::cout << "The test type is: " << sub_root->Name()<<std::endl;
+        //std::cout << "The test type is: " << sub_root->Name()<<std::endl;
         return deserialize_node(src, sub_root);     
     }
 }

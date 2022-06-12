@@ -19,8 +19,8 @@ namespace xml{
     }
     template <typename T>
     bool serialize(const T& src, const std::string& file){
-        // if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::ret)
-        //     throw "Not valid type! at serialize()";
+         if(is_valid_type<T> == Type::OTHER && !is_user_defined<T>::value)
+             throw "Not valid type! at serialize()";
         XMLDocument* doc = InitXML();
 
         //std::cout << "init completed" << std::endl;

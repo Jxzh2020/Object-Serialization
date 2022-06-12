@@ -87,30 +87,19 @@
 
 namespace detail {
 
-template <typename Fn, typename Tuple, std::size_t... I>
+template <typename Fun, typename Tuple, std::size_t... I>
 inline constexpr void ForEachTuple(Tuple&& tuple,
-                                   Fn&& fn,
+                                   Fun&& fun,
                                    std::index_sequence<I...>) {
-//   using Expander = int[];
-//   (void)Expander{((void)fn(std::get<I>(std::forward<Tuple>(tuple))), 0)...};
-     //static_cast<void>
-     std::initializer_list<int>{(fn(std::get<I>(tuple),I), 0)...};
+     std::initializer_list<int>{(fun(std::get<I>(tuple),I), 0)...};
 
 }
 
-template <typename Fn, typename Tuple>
-inline constexpr void ForEachTuple(Tuple&& tuple, Fn&& fn) {
-  ForEachTuple(tuple, fn, std::make_index_sequence<std::tuple_size<std::decay_t<Tuple>>::value>{});
+template <typename Fun, typename Tuple>
+inline constexpr void ForTuple(Tuple&& tuple, Fun&& fun) {
+  ForEachTuple(tuple, fun, std::make_index_sequence<std::tuple_size<std::decay_t<Tuple>>::value>{});
 }
 
-template <typename T>
-struct is_field_pointer : std::false_type {};
-
-template <typename C, typename T>
-struct is_field_pointer<T C::*> : std::true_type {};
-
-template <typename T>
-constexpr auto is_field_pointer_v = is_field_pointer<T>::value;
 
 }  // namespace detail
 
@@ -119,6 +108,9 @@ template <typename T>
 inline constexpr auto StructSchema() {
   return std::make_tuple();
 }
+template <typename U>
+struct is_user_defined : std::false_type{};
+
 template <typename T>
 constexpr auto ClassName(){return "Not_Userdefined_type";}
 
@@ -126,18 +118,20 @@ constexpr auto ClassName(){return "Not_Userdefined_type";}
 
 
 
-#define DEFINE_STRUCT_SCHEMA(Struct, ...)        \
-  template <>                                    \
-  inline constexpr auto StructSchema<Struct>() { \
-    using _Struct = Struct;                      \
-    return std::make_tuple(__VA_ARGS__);         \
-  }                                              \
-  template <>                                    \
-constexpr auto ClassName<Struct>(){return #Struct;}
+#define DEFINE_STRUCT_SCHEMA(Struct, ...)             \
+  template <>                                         \
+  inline constexpr auto StructSchema<Struct>() {      \
+    using Forward_Struct = Struct;                    \
+    return std::make_tuple(__VA_ARGS__);              \
+  }                                                   \
+  template <>                                         \
+  struct is_user_defined<Struct> : std::true_type {}; \
+  template <>                                         \
+  constexpr auto ClassName<Struct>(){return #Struct;}
 
 
-#define DEFINE_STRUCT_FIELD(StructField, FieldName) \
-  std::make_tuple(&_Struct::StructField, FieldName)
+#define DEFINE_STRUCT_FIELD(Struct, Name)             \
+  std::make_tuple(&Forward_Struct::Struct, Name)
 
 
 
@@ -145,16 +139,18 @@ template <typename T>
 constexpr auto struct_schema = StructSchema<std::decay_t<T>>();
 
 template <typename T, typename Fn>
-inline void ForEachField(T&& value, int i, Fn&& fn) {
-  detail::ForEachTuple(struct_schema<T>, 
-  [&value, &fn, &i](auto&& field_schema, int j) {
+inline void ForField(T& object, int i, Fn&& fn) {
+  detail::ForTuple(struct_schema<T>, 
+  [&object, &fn, &i](auto&& field_schema, int j) {
     if(j == i)
-        fn(value.*(std::get<0>(field_schema)), std::get<1>(field_schema));
+        fn(object.*(std::get<0>(field_schema)), std::get<1>(field_schema));
     else
         return;
   }
   );
 }
+
+
 
 
 
