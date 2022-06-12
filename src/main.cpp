@@ -15,7 +15,7 @@ struct User{
         gpa = {"good", "second"};
     }
     ~User(){}
-    bool operator==(const User& rhs){
+    inline bool operator==(const User& rhs){
         if(id == rhs.id)
             if(age == rhs.age)
                 if(gpa == rhs.gpa)
@@ -27,6 +27,13 @@ struct User{
         std::vector<std::string> gpa;
         std::map<int,float> sub;
 };
+DEFINE_STRUCT_SCHEMA(User,
+                    DEFINE_STRUCT_FIELD(id,"id"),
+                    DEFINE_STRUCT_FIELD(age,"age"),
+                    DEFINE_STRUCT_FIELD(gpa,"gpa"),
+                    DEFINE_STRUCT_FIELD(sub,"sub")
+                    );
+
 struct Demo{
     Demo(){}
     void Init_r(){
@@ -38,7 +45,7 @@ struct Demo{
         token.push_back("item[2]");
         token.push_back("item[3]");
     }
-    bool operator==(const Demo& rvl){
+    inline bool operator==(const Demo& rvl){
         if(id==rvl.id)
             if(ratio == rvl.ratio)
                 if(name == rvl.name)
@@ -53,13 +60,14 @@ struct Demo{
     std::vector<std::string> token;
     User cases;
 };
-
-DEFINE_STRUCT_SCHEMA(User,
+DEFINE_STRUCT_SCHEMA(Demo,
                     DEFINE_STRUCT_FIELD(id,"id"),
-                    DEFINE_STRUCT_FIELD(age,"age"),
-                    DEFINE_STRUCT_FIELD(gpa,"gpa"),
-                    DEFINE_STRUCT_FIELD(sub,"sub")
-                    );
+                    DEFINE_STRUCT_FIELD(ratio,"ratio"),
+                    DEFINE_STRUCT_FIELD(name,"name"),
+                    DEFINE_STRUCT_FIELD(token,"token"),
+                    DEFINE_STRUCT_FIELD(cases,"cases"));
+
+
 
 void test_bin();
 void test_xml();
@@ -77,19 +85,13 @@ template<typename T>
 void test_test_xml(T& src){
     T des;
     xml::serialize(src,"se.xml");
-    getchar();
     xml::deserialize(des,"se.xml");
     std::cout << "The test type is " << typeid(T).name() << std::endl;
     std::cout << std::boolalpha << "The result is " << (bool)(src == des) << std::endl;
 }
 
 
-DEFINE_STRUCT_SCHEMA(Demo,
-                    DEFINE_STRUCT_FIELD(id,"id"),
-                    DEFINE_STRUCT_FIELD(ratio,"ratio"),
-                    DEFINE_STRUCT_FIELD(name,"name"),
-                    DEFINE_STRUCT_FIELD(token,"token"),
-                    DEFINE_STRUCT_FIELD(cases,"cases"));
+
 
 
 void test_usrdefined(){
@@ -125,7 +127,7 @@ void test_bin(){
     std::vector<std::list<int>> test_v_l = {test_list,{2,6,8,45,6},{898,7787,5454}};
     std::map<std::vector<int>,std::string> test_i_m = {{test_vector,"first is here"},{{7,45,88,954,}, "this is the second"}};
     std::list<std::vector<int>> test_l_v = {{2,6,8,45,6},{898,7787,5454}};
-    /*
+    
     test_test_bin(test_bool);
     test_test_bin(test_char);
     test_test_bin(test_int);
@@ -136,9 +138,9 @@ void test_bin(){
     test_test_bin(test_set);
     test_test_bin(test_map);
     test_test_bin(test_pair);
-    */
+    
     test_test_bin(test_v_l);
-    /*
+    
     test_test_bin(test_i_m);
 
     Demo src,des;
@@ -146,7 +148,7 @@ void test_bin(){
     src.cases.age = 99;
     
     test_test_bin(src);
-    */
+    
 
 }
 void test_xml(){
@@ -166,7 +168,7 @@ void test_xml(){
     std::map<std::vector<int>,std::string> test_i_m = {{test_vector,"first is here"},{{7,45,88,954,}, "this is the second"}};
     std::list<std::vector<int>> test_l_v = {{2,6,8,45,6},{898,7787,5454}};
     std::set<std::list<int>> test_s_l = {{2,6,8,45,6},{898,7787,5454}};
-    /*
+    
     test_test_xml(test_bool);
     test_test_xml(test_char);
     test_test_xml(test_int);
@@ -177,10 +179,9 @@ void test_xml(){
     test_test_xml(test_set);
     test_test_xml(test_map);
     test_test_xml(test_pair);
-    getchar();
-    */
+    
     test_test_xml(test_s_l);
-    /*
+    
     test_test_xml(test_i_m);
 
     Demo src,des;
@@ -188,7 +189,7 @@ void test_xml(){
     src.cases.age = 99;
     
     test_test_xml(src);
-    */
+    
 
 }
 
@@ -198,6 +199,5 @@ int main(){
     std::cout << "\033[35m The XML tests are as follows\033[0m" << std::endl;
     test_xml();
     
-
     return 0;
 }

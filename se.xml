@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Serializer>
-    <std_set>
-        <std_list>
-            <int value="2"/>
-            <int value="6"/>
-            <int value="8"/>
-            <int value="45"/>
-            <int value="6"/>
-        </std_list>
-        <std_list>
-            <int value="898"/>
-            <int value="7787"/>
-            <int value="5454"/>
-        </std_list>
-    </std_set>
+    <Demo>
+        <int value="1"/>
+        <float value="3.1415927"/>
+        <string value="Pass test!"/>
+        <std_vector>
+            <string value="item[1]"/>
+            <string value="item[2]"/>
+            <string value="item[3]"/>
+        </std_vector>
+        <User>
+            <int value="3200"/>
+            <int value="99"/>
+            <std_vector>
+                <string value="good"/>
+                <string value="second"/>
+            </std_vector>
+            <std_map/>
+        </User>
+    </Demo>
 </Serializer>

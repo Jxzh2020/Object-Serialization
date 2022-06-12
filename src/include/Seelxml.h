@@ -98,9 +98,7 @@ namespace Seelxml{
         XMLElement* sub_root = doc->NewElement(tname.c_str());
         root->InsertEndChild(sub_root);
         for(auto& i : data){
-            std::cout << "here the sub of vector starts: " << std::endl;
-            std::cout << is_valid_type<std::decay_t<decltype(i)>> << std::endl;
-            getchar();
+            //std::cout << is_valid_type<std::decay_t<decltype(i)>> << std::endl;
             step+=Seelxml::serialize_node(i, doc, sub_root);
         }
             
@@ -289,7 +287,7 @@ namespace Seelxml{
     XMLError deserialize(T& src, XMLElement* root){
         XMLElement * sub_root;
         sub_root = root->FirstChildElement();
-        std::cout << "name is: " << sub_root->Name()<<std::endl;
+        std::cout << "The test type is: " << sub_root->Name()<<std::endl;
         return deserialize_node(src, sub_root);     
     }
 }

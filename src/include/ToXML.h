@@ -37,7 +37,8 @@ namespace xml{
     bool deserialize(T& src, const std::string& file){
         
         XMLDocument* doc = new XMLDocument();
-        std::cout << doc->LoadFile(file.c_str()) << std::endl;
+        // << doc->LoadFile(file.c_str()) << std::endl;
+        doc->LoadFile(file.c_str());
         XMLElement* root = doc->FirstChildElement("Serializer");
         Seelxml::deserialize(src,root);
         
