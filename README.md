@@ -3,6 +3,7 @@
 2022-ZJU-OOP Final-Project cx
 
 Note: <font color="red">**`/build` is essential for the project to compile, please mkdir**</font>
+
 Simply run the shell script `./run.sh` to compile and run the program, which depends to the `Makefile` coded by me earlier.
 
 ## Project requirements
