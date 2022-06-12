@@ -1,5 +1,5 @@
 .vscode/
-build/
+/build/*
 /a.out
 /se.bin
 /log.txt
