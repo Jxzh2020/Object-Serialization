@@ -1,7 +1,13 @@
-# Object-Serialization
+# <center>Object-Serialization</center>
+
 2022-ZJU-OOP Final-Project cx
 
-## Serialization
+Simply run the shell script `./run.sh` to compile and run the program, which depends to the `Makefile` coded by me earlier.
+
+## Project requirements
+***
+
+### Description
 
 In computer science, serialization is the process of translating object state into a format that can be stored/transmitted and reconstructed later.
 
@@ -10,8 +16,7 @@ For cases where you want to read/edit the serialized data, e.g., for software co
 
 Please refer to [Serialization](https://en.wikipedia.org/wiki/Serialization) for more details.
 
----
-## Requirements
+### Requirements
 - Implement a module to support binary serialization/deserialization:
 ```cpp
 int n0 = 256, n1;
@@ -33,10 +38,10 @@ deserialize_xml(pair1, "std_pair", "pair.xml");
 The pair.xml would be something like:
 ```xml
 <serialization>
-  <std_pair>
-      <first val="2"/>
-      <second val="3.1000000000000001"/>
-  </std_pair>
+<std_pair>
+    <first val="2"/>
+    <second val="3.1000000000000001"/>
+</std_pair>
 </serialization>
 ```
 - Every module has its namespace.
@@ -44,5 +49,5 @@ The pair.xml would be something like:
 - Both modules should provide a convenient mechanism (by macro, template, etc.) to support the serialization of user-defined types, e.g.,
 
 - During testing, you should cover all the required types and options.
-- **\[Bonus\]** Use binary-to-text encoding/decoding ([base64](https://en.wikipedia.org/wiki/Base64)) to implement a binary mode of XML serialization.
-- **\[Bonus\]** Support the serialization of smart pointers, e.g., `std::unique_ptr`.
+- **Bonus** Use binary-to-text encoding/decoding ([base64](https://en.wikipedia.org/wiki/Base64)) to implement a binary mode of XML serialization.
+- **Bonus** Support the serialization of smart pointers, e.g., `std::unique_ptr`.
