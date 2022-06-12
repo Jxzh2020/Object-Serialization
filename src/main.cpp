@@ -26,12 +26,30 @@ struct User{
         int age;
         std::vector<std::string> gpa;
         std::map<int,float> sub;
+        std::string test_string = "hello world";
+        std::vector<int> test_vector = {1,2,3};
+        std::list<int> test_list = {4,5,6};
+        std::set<int> test_set = {7,8,9};
+        std::map<int,std::string> test_map = {{1,"how"},{2,"are"},{3,"you"}};
+        std::pair<std::string,std::string> test_pair = {"happy birthday", "to you!"};
+        std::vector<std::list<int>> test_v_l = {test_list,{2,6,8,45,6},{898,7787,5454}};
+        std::map<std::vector<int>,std::string> test_i_m = {{test_vector,"first is here"},{{7,45,88,954,}, "this is the second"}};
+        std::list<std::vector<int>> test_l_v = {{2,6,8,45,6},{898,7787,5454}};
 };
 DEFINE_STRUCT_SCHEMA(User,
                     DEFINE_STRUCT_FIELD(id,"id"),
                     DEFINE_STRUCT_FIELD(age,"age"),
                     DEFINE_STRUCT_FIELD(gpa,"gpa"),
-                    DEFINE_STRUCT_FIELD(sub,"sub")
+                    DEFINE_STRUCT_FIELD(sub,"sub"),
+                    DEFINE_STRUCT_FIELD(test_string,"test_string"),
+                    DEFINE_STRUCT_FIELD(test_vector,"test_vector"),
+                    DEFINE_STRUCT_FIELD(test_list,"test_list"),
+                    DEFINE_STRUCT_FIELD(test_set,"test_set"),
+                    DEFINE_STRUCT_FIELD(test_map,"test_map"),
+                    DEFINE_STRUCT_FIELD(test_pair,"test_pair"),
+                    DEFINE_STRUCT_FIELD(test_v_l,"test_v_l"),
+                    DEFINE_STRUCT_FIELD(test_i_m,"test_i_m"),
+                    DEFINE_STRUCT_FIELD(test_l_v,"test_l_v")
                     );
 
 struct Demo{
