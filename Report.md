@@ -1,6 +1,6 @@
 # <center>Object-Serialization</center>
 
-2022-ZJU-OOP Final-Project cx
+2022-ZJU-OOP Final-Project cx 
 
 Simply run the shell script `./run.sh` to compile and run the program, which depends to the `Makefile` coded by me earlier.
 
@@ -62,7 +62,7 @@ Simply run the shell script `./run.sh` to compile and run the program, which dep
 
 ### 2.2 Tested cases
 
-It should support any combination of the following types in theory, but due to the complexity of test, only several representative cases are tested.
+It should support any combination and any nested situation of the following types in theory, but due to the complexity of test, only several representative cases are tested.
 
 #### 2.2.1 Basic data types
 The project tested many cases where all the mentioned data types are combined:
@@ -105,7 +105,7 @@ The project tested many cases where all the mentioned data types are combined:
     std::list<std::vector<int>> test_l_v = {{2,6,8,45,6},{898,7787,5454}};
     std::set<std::list<int>> test_s_l = {{2,6,8,45,6},{898,7787,5454}};
 ```
-Note: **The program is coded in the way where in theory, any combination of data types can be serialized and deserialized in either binary way or XML way.**
+Note: **The program is coded in the way where in theory, any combination and any nested situation of data types can be serialized and deserialized in either binary way or XML way.**
 
 #### 2.2.2 User defined types
 
@@ -169,12 +169,14 @@ The upper abstraction is in `namespace binary`. It provides the following functi
 The serialized data is transferd by Class `Seel`, which later is also responsible for the deserialization:
 
 The member variants of `Seel` are:
+
 ```cpp
     Type return_type;       // the class type it should return when deserialized
     int32_t meta_num;       // the total number of elements
     size_t atom_size;       // the size of atomic elements
     char* data_;            // binary of the object
 ```
+
 Here atomic elements means those types that can not be cut to smaller conponents, e.g., `int` and `char` are atomic, but `std::string` and STL containers like `std::vector<>` are not. `data_` is what stores the object we want to serialize and is also what we want to deserialize from later on.
 Apart from `data_`, other three data members are metadata used to indicate the deserialization process.
 For atomic types, `data_` is simply a binary data recieved by `memcpy` from the object. For non-atomic types, `data_` is exactly what each of its conponents is serialized to file. If the conponent of a non-atomic type is also a non-atomic type, then do it recursively.
@@ -221,6 +223,8 @@ To serialize a object, program first check if it's atom type. If so, open a chil
 
 ### Reflection
 
+To implement the support of any user-defined type, a simple reflection mechanism is needed. This program has a simple static reflection mechanism that not affecting the run-time performance.
+
 #### Eleminated implementation
 
 To implement a static reflection function, I first tried a totally based on macro way, namely insert functions into user-defined types like:
@@ -259,7 +263,7 @@ test.FUN(1) = 32000;
 
 All the code of the mentioned way is in `src/dumped/include`.
 <font color="red">
-Due to three unavoid drawbacks, the above way is dumped:
+Due to three unavoidable drawbacks, the above way is dumped:
 1. The number of reflected member variants are limited due to the way I organized the macro. The upper boundray I set is 16, and once more is needed, I have to add the number list manually.
 2. Since the `FUN()` is a macro, it's processed way before run-time, even before compile time, because of which, a dynamic way of accessing is impossible, there is no way I can `demo.FUN(i)` where `i` is a number in run-time.
 3. The macro actually defines some member funcitons in the struct that user defined, which is hidden in the back stage.
